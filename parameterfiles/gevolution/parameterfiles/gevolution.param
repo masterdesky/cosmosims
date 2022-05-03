@@ -1,0 +1,65 @@
+# Setting input parameters
+IC generator      =   read from disk
+#template file    =   /dev/null
+tiling factor     =   1
+particle file     =
+#metric file      =   /dev/null
+baryon treatment  =   blend
+#Tk file          =   /dev/null
+#mPk file         =   /dev/null
+
+
+# Setting simulation and IC generation parameters
+seed              =   2022
+correct displacement  =   yes
+k-domain          =   sphere
+initial redshift  =
+relaxation redshift   =   127
+prevolution redshift  =   9999
+boxsize           =
+Ngrid             =
+Courant factor    =   48.0
+move limit        =   8.0
+time step limit   =   0.04
+gravity theory    =   GR
+vector method     =   parabolic
+radiation treatment   =   CLASS
+fluid treatment   =   CLASS
+switch delta_rad  =   15
+switch delta_ncdm =   15, 10
+switch B ncdm     =   15, 10
+switch linear chi =   15
+
+
+# Setting cosmological parameters
+h                 =
+omega_cdm         =   0.12038
+omega_b           =   0.022032
+omega_fld         =   0
+w0_fld            =   -1.0
+wa_fld            =   0
+cs2_fld           =   1
+A_s               =   2.215e-9
+k_pivot           =   0.05
+n_s               =   0.9619
+T_cmb             =   2.7255
+N_ur              =   3.046
+N_ncdm            =   2
+m_ncdm            =   0.04, 0.04
+deg_ncdm          =   1.0, 1.0
+T_ncdm            =   0.71611, 0.71611
+
+# Setting simulation outputs
+output path       =
+generic file base =
+snapshot file base    =
+Pk file base      =
+lightcone file base   =   DM_GR_lightcone
+snapshot redshifts    =   30, 10, 3, 0
+snapshot outputs  =   phi, B, chi, Gadget2
+tracer factor     =   1, 1, 1
+downgrade factor  =   1
+Pk redshifts      =   50, 30, 10, 3, 1, 0
+Pk outputs        =   phi, B, chi, hij
+Pk bins           =   1024
+lightcone outputs =   phi, Gadget2

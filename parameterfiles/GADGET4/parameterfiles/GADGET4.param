@@ -1,0 +1,85 @@
+
+%----  Relevant files 
+InitCondFile
+OutputDir
+SnapshotFileBase
+OutputListFilename
+
+
+%---- File formats
+ICFormat             1
+SnapFormat           1
+
+%---- CPU-time limits
+TimeLimitCPU              86400   % 24h in seconds
+CpuTimeBetRestartFile     900     % 15m  in seconds
+
+%----- Memory alloction
+MaxMemSize                900    % in MByte
+
+%---- Caracteristics of run
+TimeBegin
+TimeMax
+
+%---- Basic code options that set the type of simulation
+ComovingIntegrationOn     1 
+
+%---- Cosmological parameters
+Omega0
+OmegaLambda
+OmegaBaryon
+HubbleParam
+Hubble
+BoxSize
+
+%---- Output frequency and output paramaters
+OutputListOn              1 
+TimeBetSnapshot           0.0
+TimeOfFirstSnapshot       0.0
+TimeBetStatistics         0.05
+NumFilesPerSnapshot       1
+MaxFilesWithConcurrentIO
+
+%---- Accuracy of time integration
+ErrTolIntAccuracy        0.01 
+CourantFac               0.3
+MaxSizeTimestep          0.005
+MinSizeTimestep          0.0 
+
+%---- Tree algorithm, force accuracy, domain update frequency
+TypeOfOpeningCriterion                1
+ErrTolTheta                           0.75
+ErrTolThetaMax                        1.0
+ErrTolForceAcc                        0.002
+TopNodeFactor                         3.0
+
+ActivePartFracForNewDomainDecomp      0.01
+ActivePartFracForPMinsteadOfEwald     0.05
+
+%---- Initial density estimate
+DesNumNgb                        64
+MaxNumNgbDeviation               1 
+
+%---- System of units
+UnitLength_in_cm
+UnitMass_in_g
+UnitVelocity_in_cm_per_s
+GravityConstantInternal  0
+
+
+%---- Gravitational softening length
+SofteningComovingClass0      0.01           ; 10 kpc/h
+SofteningMaxPhysClass0       0.01
+
+SofteningClassOfPartType0    0
+SofteningClassOfPartType1    0
+SofteningClassOfPartType2    0
+SofteningClassOfPartType3    0
+SofteningClassOfPartType4    0
+SofteningClassOfPartType5    0
+
+
+%----- SPH
+ArtBulkViscConst             1.0
+MinEgySpec                   0
+InitGasTemp                  0

@@ -1,0 +1,32 @@
+Cosmological Parameters:
+------------------------
+COSMOLOGY	1
+Particle_mass	1.0
+Omega_b		0.0			% Baryon density
+Omega_lambda	0.0	% DE density
+Omega_dm	1.0			% DM density
+Omega_r		0.0			% Matter density
+H0
+a_start		0.0001	% Starting scale factor
+
+
+Simulation parameters:
+----------------------
+IS_PERIODIC	3
+COMOVING_INTEGRATION	1
+L_box
+IC_FILE
+IC_FORMAT	0
+OUT_DIR
+OUT_LST
+OUTPUT_TIME_VARIABLE	1
+OUTPUT_FORMAT	1
+REDSHIFT_CONE	0
+MIN_REDSHIFT	0.0003012504
+a_max		1.0
+ACC_PARAM	0.005
+h_min		0.00000002
+h_max           0.5
+ParticleRadi    0.0002
+FIRST_T_OUT	0.25
+H_OUT		0.25
