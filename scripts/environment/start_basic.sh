@@ -5,8 +5,7 @@
 #   start_basic.sh
 #
 #   Downloads and installs the requested basic softwares required for
-#   most cosmological softwares. The available softwares are OpenMPI,
-#   GSL 1.X, GSL 2.X, FFTW 2.X, FFTW 3.X, hwloc and HDF5.
+#   most cosmological softwares.
 #
 # 
 # ==============================================================================
@@ -37,8 +36,8 @@ usage() {
   echo "  --ifftw3 : Install FFTW ${FFTW3_VER} to ${INSTALLDIR}."
   echo "  --dhwloc : Download hwloc ${HWLOC_VER} source files to ${BUILDDIR}."
   echo "  --ihwloc : Install hwloc ${HWLOC_VER} to ${INSTALLDIR}."
-  echo "  --dlat2 : Download LATfield2 source files to ${BUILDDIR}."
-  echo "  --ilat2 : Install LATfield2 to ${INSTALLDIR}."
+  echo "  --dlat2  : Download LATfield2 source files to ${BUILDDIR}."
+  echo "  --ilat2  : Install LATfield2 to ${INSTALLDIR}."
   echo "  --dhdf5  : Download HDF ${HDF5_VER} source files to ${BUILDDIR}."
   echo "  --ihdf5  : Install HDF ${HDF5_VER} to ${INSTALLDIR}."
   echo "  --help   : Displays this message."
