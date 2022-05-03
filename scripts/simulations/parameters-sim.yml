@@ -1,0 +1,44 @@
+# BUILD LOCATION OF SOFTWARES USED FOR THE SIMULATIONS
+CONDAROOT   : ${HOME}
+BUILDDIR    : ${HOME}/apps
+LOGDIR      : ${PIPELINEDIR}/logs
+COMPUTER    : my_comp
+
+# LOCATIONS OF VOLUME FILES THAT ARE IMPORTANT FOR THE SIMULATION
+## Automatically filled
+GLASS_IC    : /home/masterdesky/data/GADGET2/Glass_ICs/Glass_IC_N262144_L500_M1_min1
+GLASS       : /home/masterdesky/data/GADGET2/Simulations/Glasses/Glasses_N262144_L500_M1/output/Glass_N262144_L500_M1_min1
+IC          : /home/masterdesky/data/2LPT-IC/ICs/IC_N262144_L1000_M1/IC_N262144_L500_M1_min1
+
+# TECHNICAL PARAMETERS
+N_CPUS        : 4
+N_GPUS        : 1
+CUDA_VISIBLE_DEVICES : 0,1,2
+
+# PARAMETERS FOR GLASS IC GENERATION
+NPART         : 262144
+LBOX          : 500
+LBOX_H        : TO_BE_CALC
+MBINS         : 1
+PARTMIN       : 150
+
+# PARAMETERS FOR NBODY IC GENERATION AND SIMULATION
+NMESH         : 128
+LBOX_PER      : 1000
+LBOX_PER_H    : TO_BE_CALC
+GLASSTILEFAC  : 2
+START_Z       : 127
+END_Z         : 0
+N_SNAPSHOTS   : 2
+N_FILES       : 1
+
+# COSMOLOGICAL VARIABLES
+H0        : 67.66
+h         : TO_BE_CALC
+S_g       : TO_BE_CALC
+M_g       : TO_BE_CALC
+V_g       : TO_BE_CALC
+OMEGA_B   : 0.0490
+OMEGA_C   : 0.2607
+OMEGA_M   : 0.3111
+OMEGA_L   : 0.6889
