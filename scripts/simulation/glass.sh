@@ -2,9 +2,9 @@
 
 # ==============================================================================
 #
-#   nbody.sh
+#   glass.sh
 #
-#   Handles the N-body simulations using GADGET4 or AREPO.
+#   Handles the glass generation using StePS or GADGET2.
 #
 # 
 # ==============================================================================
@@ -40,9 +40,12 @@ usage() {
   echo "Possible arguments are the following:"
   echo
   echo "  --calc-missing : Calculates necessary variables for the simulations."
+  echo "  --glass-ic     : Generate initial conditions for the glass generation."
+  echo "  --glass-sim    : Perform the glass simulation on CPU or GPU."
+  echo "  --force-g2     : Run glass and glass IC generation using GADGET-2."
+  echo "  --force-steps  : Run glass generation using StePS."
   echo "  --perturbate   : Apply 2LPT perturbations to the input glass."
-  echo "  --n-body       : Perform the N-body simulation on the input glass."
-  echo "  --gr           : Use the GR equations for the N-body simulation."
+  echo "  --ophase       : Apply opposite phase 2LPT perturbations."
   echo "  --help         : Displays this message."
   echo 
 }
@@ -53,12 +56,13 @@ clean_up() {
 }
 
 
+FLAGS="calc-missing,glass-ic,glass-sim,force-g2,force-steps,perturbate,ophase,help"
 # Call getopt to validate the provided input. 
-options=$(getopt -o '' --long calc-missing,perturbate,ophase,n-body,gr,help -- "$@")
+options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
-    echo "Incorrect options provided" \
+    echo "[GLASS GEN] Incorrect options provided" \
     | ts "[%x %X]"
-    usage;
+    usage
     exit 1
 }
 eval set -- "${options}"
@@ -67,25 +71,28 @@ while true; do
   --calc-missing)
       export CALC_MISSING=true
       ;;
+  --glass-ic)
+      export GLASS_IC_GEN=true
+      ;;
+  --glass-sim)
+      export GLASS_SIM=true
+      ;;
+  --force-g2)
+      export FORCE_G2=true
+      ;;
+  --force-steps)
+      export FORCE_STEPS=true
+      ;;
   --perturbate)
       export PERTURBATE=true
       ;;
   --ophase)
       export O_PHASE=true
       ;;
-  --n-body)
-      export NBODY=true
-      ;;
-  --gevol)
-      export GEVOL=true
-      ;;
-  --cgr)
-      export CGR=true
-      ;;
   --help)
       usage
       clean_up
-      exit 1;
+      exit 1
       ;;
   --)
       break
@@ -111,26 +118,29 @@ if [[ ${CALC_MISSING} = true ]]; then
   conda deactivate
 fi
 
-if [[ ${PERTURBATE} = true ]]; then
-  # Perturbate glass with 2LPT-IC
-  source ${SIMDIR}/nbody_sim/perturbate_2lptic.sh
+
+# Perform glass generation
+if [[ ${FORCE_STEPS} = true ]]; then
+  if [[ ${GLASS_SIM} = true ]]; then
+    echo
+    echo "[GLASS GEN] StePS simulation with ${MBINS} mass bin." \
+    | ts "[%x %X]"
+  fi
+  source ${SIMDIR}/glass_linear/glass_StePS.sh
+else
+  if [[ ${GLASS_SIM} = true ]]; then
+    echo
+    echo "[GLASS GEN] GADGET2 simulation with ${MBINS} mass bin." \
+    | ts "[%x %X]"
+  fi
+  source ${SIMDIR}/glass_linear/glass_gadget2.sh
 fi
 
-if [[ ${NBODY} = true ]]; then
-  if [[ ${GEVOL} = true ]]; then
-    echo "[NBODY] gevolution 1.2 simulation with GR physics." \
-    | ts "[%x %X]"
-    source ${SIMDIR}/nbody_sim/nbody_gevolution.sh
-  elif [[ ${CGR} = true ]]; then
-    echo "[NBODY] CosmoGRaPH simulation with GR physics." \
-    | ts "[%x %X]"
-    source ${SIMDIR}/nbody_sim/nbody_cgr.sh
-  else
-    echo "[NBODY] GADGET4 simulation with newtonian physics." \
-    | ts "[%x %X]"
-    ${SCRIPTDIR}/environment/start_top.sh --ig4
-    source ${SIMDIR}/nbody_sim/nbody_gadget4.sh
-  fi
+
+# Add non-linear components to the linear glass
+if [[ ${PERTURBATE} = true ]]; then
+  # Perturbate glass with 2LPT-IC
+  source ${SIMDIR}/glass_nonlinear/perturbate_2lptic.sh
 fi
 
 

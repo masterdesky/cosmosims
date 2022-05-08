@@ -50,7 +50,7 @@ sed -i '/^UnitVelocity_in_cm_per_s/ { s|$| '"${V_g}"'   ;  cm / s| }' ${CURRENT_
 
 
 # >>>>>> START OF THE GLASS GENERATION <<<<<<
-if [[ ${GLASS_IC_GEN} = true ]] && [[ ${FORCE_G2} != true ]]; then
+if [[ ${GLASS_IC_GEN} = true ]]; then
   echo
   echo "[GLASS GEN] Generating IC for the glass generation..." \
        | ts "[%x %X]"
@@ -59,15 +59,15 @@ if [[ ${GLASS_IC_GEN} = true ]] && [[ ${FORCE_G2} != true ]]; then
   # Activate environment containing astropy and the basic packages
   conda activate cosmo
   # Generate IC for StePS glass generation
-  ${SIMDIR}/glass_sim/generate_glass_IC.py ${NPART} ${LBOX_H} ${MBINS} \
-                                           ${PARTMIN} ${H0} ${GLASS_IC}.dat
+  ${SIMDIR}/glass_linear/generate_glass_IC.py ${NPART} ${LBOX_H} ${MBINS} \
+                                              ${PARTMIN} ${H0} ${GLASS_IC}.dat
 
   echo
   echo "[GLASS GEN] Converting glass IC generation output to Gadget format..." \
        | ts "[%x %X]"
   echo
 
-  # The glass IC file parameters are in [Mpc], convert them to [Mpc/h]
+  # Convert ASCII file to Gadget and rescale quantities from [Mpc] to [Mpc/h]
   ${SIMDIR}/gadget_io/ascii2gadget.py ${GLASS_IC}.dat ${GLASS_IC} \
                                       ${LBOX} ${START_Z} \
                                       ${H0} "1.0" "0.0"
@@ -79,16 +79,16 @@ if [[ ${GLASS_IC_GEN} = true ]] && [[ ${FORCE_G2} != true ]]; then
   echo
 fi
 
-if [[ ${GLASS_SIM} = true ]]; then
-  # Compile GADGET-2 with the set parameters
-  ${SCRIPTDIR}/environment/start_top.sh --ig2
-
+if [[ ${GLASS_SIM} = true ]] && [[ ${FORCE_STEPS} != true ]]; then
   echo
   echo "[GLASS GEN] Generating glass using GADGET2..." \
        | ts "[%x %X]"
   echo
+  
+  # Compile GADGET-2 with the set parameters
+  ${SCRIPTDIR}/environment/start_top.sh --ig2
 
-  # Create an `outputs.txt` file and write 1.0 into it
+  # Create an `outputs.txt` file and write "1.0" into it
   # This will tell GADGET2 to write the current state of the simulation
   # into this file exclusively at z=0
   echo "1.0" > ${GLASS_DIR}/outputs.txt

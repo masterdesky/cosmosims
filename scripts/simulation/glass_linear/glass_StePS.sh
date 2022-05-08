@@ -48,8 +48,8 @@ if [[ ${GLASS_IC_GEN} = true ]]; then
   # Activate environment containing astropy and the basic packages
   conda activate cosmo
   # Generate IC for StePS glass generation
-  ${SIMDIR}/glass_sim/generate_glass_IC.py ${NPART} ${LBOX_H} ${MBINS} \
-                                           ${PARTMIN} ${H0} ${GLASS_IC}.dat
+  ${SIMDIR}/glass_linear/generate_glass_IC.py ${NPART} ${LBOX_H} ${MBINS} \
+                                              ${PARTMIN} ${H0} ${GLASS_IC}.dat
   conda deactivate
 
   echo
@@ -58,7 +58,7 @@ if [[ ${GLASS_IC_GEN} = true ]]; then
   echo
 fi
 
-if [[ ${GLASS_SIM} = true ]]; then
+if [[ ${GLASS_SIM} = true ]] && [[ ${FORCE_G2} != true ]]; then
   echo
   echo "[GLASS GEN] Generating glass using StePS..." \
        | ts "[%x %X]"
@@ -69,13 +69,15 @@ if [[ ${GLASS_SIM} = true ]]; then
   if [[ ! -z ${GLASS_DIR} ]]; then
     rm -rf ${GLASS_DIR}
   fi
-  # Create directory for glass (StePS output)
+  # (Re)create the directory for StePS outputs
   mkdir -p ${GLASS_DIR}
-  # Create an `outtimes.txt` file and write 0 into it
+  
+  # Create an `outtimes.txt` file and write "0" into it
   # This will tell StePS to write the current state of the simulation
   # into this file exclusively at z=0
-  echo 0 >> ${GLASS_DIR}/outtimes.txt
+  echo "0" >> ${GLASS_DIR}/outtimes.txt
 
+  # Detect whether to run StePS on GPUs or CPUs
   if [[ -f ${GLASS_IC}.dat ]] && [[ -d ${GLASS_DIR} ]]; then
     # Number of threads per computing units (feasibly it equals to 1)
     export OMP_NUM_THREADS=1
@@ -107,7 +109,7 @@ if [[ ${GLASS_SIM} = true ]]; then
        | ts "[%x %X]"
   echo
 
-  # Values in z0.dat are given in [Mpc], convert them to [Mpc/h]
+  # Convert ASCII file to Gadget and rescale quantities from [Mpc] to [Mpc/h]
   conda activate cosmo
   ${SIMDIR}/gadget_io/ascii2gadget.py ${GLASS_DIR}/z0.dat ${GLASS} \
                                       ${LBOX} ${START_Z} \

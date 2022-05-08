@@ -58,19 +58,3 @@ export SUFFIX_DIR=N${NPART}_L${LBOX}_M${MBINS}
 export SUFFIX_PER=N${NPART}_L${LBOX_PER}_M${MBINS}_min${PARTMIN}
 ## Common ending for directories containing periodic volumes
 export SUFFIX_PER_DIR=N${NPART}_L${LBOX_PER}_M${MBINS}
-
-
-# Get the location of `conda.sh`
-if [[ -d /usr/local/miniconda3 ]]; then
-  export CONDAROOT=/usr/local/miniconda3
-elif [[ -d /opt/conda ]]; then
-  export CONDAROOT=/opt/conda
-elif [[ -d ${HOME}/miniconda3 ]]; then
-  export CONDAROOT=${HOME}/miniconda3
-else
-  echo "[ERROR] Conda could not be found on the machine!" | ts "[%x %X]"
-  clean_up
-  exit 1
-fi
-# `conda.sh` should be sourced first if `conda` is ran from bash script
-source ${CONDAROOT}/etc/profile.d/conda.sh

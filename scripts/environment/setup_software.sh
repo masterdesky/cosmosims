@@ -2,28 +2,29 @@
 
 # ==============================================================================
 #
-#   start_top.sh
+#   start_software.sh
 #
 #   Downloads and installs the requested simulation softwares.
-#   The available softwares are 2LPTic and its variant for the
-#   opponent phase (+pi), GADGET2, GADGET4, Arepo, StePS and
-#   gadgetviewer 1.1.1.
 #
 #
 # ==============================================================================
 
 # The `ENVDIR` directory will be defined as the directory containing the 
-#`start_*.sh`, `parse_yaml.sh` and `setup_env.sh` scripts for the environment
-# setup, as well as the build directories that contain the configuration files 
-# and scripts needed to build the required softwares
+# install scripts for cosmological software and their dependencies, as well as
+# the build directory that contains the config files needed to build the
+# requested softwares
 export ENVDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+# The `SCRIPTDIR` directory will be defined as the directory that contains all
+# the scripts and folders that are used during the configuration and simulation
+# pipelines
+export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 
 # Parse input parameters
-source ${ENVDIR}/parse_yaml.sh ${ENVDIR}/setup_top "parameters"
+source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/software "parameters"
 
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing the basic apps
-source ${ENVDIR}/setup_env.sh
+source ${SCRIPTDIR}/setup_env.sh
 
 
 usage() {
@@ -48,6 +49,8 @@ usage() {
   echo "  --igevol  : Install gevolution to ${BUILDDIR}/gevolution."
   echo "  --dcgr    : Download CosmoGRaPH source files to ${BUILDDIR}/CosmoGRaPH."
   echo "  --icgr    : Install CosmoGRaPH to ${BUILDDIR}/CosmoGRaPH."
+  echo "  --det     : Download EinteinToolkit with FLRWSolver to ${BUILDDIR}/EinsteinToolkit."
+  echo "  --iet     : Install EinteinToolkit with FLRWSolver to ${BUILDDIR}/EinsteinToolkit."
   echo "  --dgv     : Download GADGETViewer ${GV_VER} source files to ${BUILDDIR}/GADGETViewer-${GV_VER}."
   echo "  --igv     : Install GADGETViewer ${GV_VER} to ${BUILDDIR}/GADGETViewer-${GV_VER}."
   echo "  --dgenpk  : Download GenPK source files to ${BUILDDIR}/GenPK."
@@ -58,10 +61,12 @@ usage() {
 
 clean_up() {
   # Delete created `parameters*.sh` file at the end of the script
-  rm ${ENVDIR}/setup_top/${PARFILE}-temp.sh
+  rm ${ENVDIR}/software/${PARFILE}-temp.sh
 }
 
-FLAGS=d2lpt,i2lpt,d2lptop,i2lptop,dg2,ig2,dg4,ig4,darepo,iarepo,dsteps,isteps,dgevol,igevol,dcgr,icgr,dgv,igv,dgenpk,igenpk,help
+
+FLAGS="d2lpt,i2lpt,d2lptop,i2lptop,dg2,ig2,dg4,ig4,darepo,iarepo,dsteps,isteps,\
+dgevol,igevol,dcgr,icgr,det,iet,dgv,igv,dgenpk,igenpk,help"
 # Call getopt to validate the provided input 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
@@ -127,6 +132,12 @@ while true; do
   --igv)
       export INSTALL_GV=true
       ;;
+  --det)
+      export DLOAD_ET=true
+      ;;
+  --iet)
+      export INSTALL_ET=true
+      ;;
   --dgenpk)
       export DLOAD_GENPK=true
       ;;
@@ -148,7 +159,7 @@ done
 
 
 # Download necessary softwares, then configure, build and install them
-for setup_file in ${ENVDIR}/setup_top/setup*.sh; do
+for setup_file in ${ENVDIR}/software/setup*.sh; do
   bash ${setup_file} || break  # execute successfully or break
 done
 

@@ -29,7 +29,7 @@ fi
 
 # Adding libraries to the $LD_LIBRARY_PATH variable
 for LIB_PATH in OMPI_INSTALL GSL1_INSTALL GSL2_INSTALL \
-								FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL; do
+                FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL; do
 	if [[ ":${LD_LIBRARY_PATH}:" != *":${!LIB_PATH}/lib:"* ]]; then
 		export LD_LIBRARY_PATH="${!LIB_PATH}/lib:${LD_LIBRARY_PATH}"
 	fi
@@ -44,3 +44,23 @@ for INCLUDE_PATH in LAT2_INSTALL FFTW2_INSTALL FFTW3_INSTALL HDF5_INSTALL; do
 		export CPLUS_INCLUDE_PATH="${!INCLUDE_PATH}/include:${CPLUS_INCLUDE_PATH}"
 	fi
 done
+
+
+# Initialize conda for the shell
+## Get the location of `conda.sh`
+if [[ -d /usr/local/miniconda3 ]]; then
+  export CONDAROOT=/usr/local/miniconda3
+  echo "[INFO] Conda found at /usr/local/miniconda3"
+elif [[ -d /opt/conda ]]; then
+  export CONDAROOT=/opt/conda
+  echo "[INFO] Conda found at /opt/conda"
+elif [[ -d ${HOME}/miniconda3 ]]; then
+  export CONDAROOT=${HOME}/miniconda3
+  echo "[INFO] Conda found at ${HOME}/miniconda3"
+else
+  echo "[ERROR] Conda could not be found on the machine!" | ts "[%x %X]"
+  clean_up
+  exit 1
+fi
+## `conda.sh` should be sourced first if `conda` is ran from bash script
+source ${CONDAROOT}/etc/profile.d/conda.sh
