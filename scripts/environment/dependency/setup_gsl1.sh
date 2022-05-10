@@ -5,15 +5,15 @@
 if [[ ${DLOAD_GSL1} = true ]]; then
   if [[ ! -d ${GSL1_BUILD} ]]; then
     echo
-    echo "Downloading GSL ${GSL1_VERS}..."
+    echo "Downloading GSL ${GSL1_VER}..."
     echo
 
     mkdir -p ${BUILDDIR}
 
     # Download GSL 1.X
-    wget "https://quantum-mirror.hu/mirrors/pub/gnu/gsl/gsl-${GSL1_VERS}.tar.gz" -P ${BUILDDIR}
-    tar -xzvf ${BUILDDIR}/gsl-${GSL1_VERS}.tar.gz -C ${BUILDDIR}
-    rm -f ${BUILDDIR}/gsl-${GSL1_VERS}.tar.gz
+    wget "https://quantum-mirror.hu/mirrors/pub/gnu/gsl/gsl-${GSL1_VER}.tar.gz" -P ${BUILDDIR}
+    tar -xzvf ${BUILDDIR}/gsl-${GSL1_VER}.tar.gz -C ${BUILDDIR}
+    rm -f ${BUILDDIR}/gsl-${GSL1_VER}.tar.gz
   fi
 fi
 
@@ -21,7 +21,7 @@ fi
 if [[ ${INSTALL_GSL1} = true ]];
 then
     echo
-    echo "Installing GSL ${GSL1_VERS}..."
+    echo "Installing GSL ${GSL1_VER}..."
     echo
 
     mkdir -p ${INSTALLDIR}

@@ -5,15 +5,15 @@
 if [[ ${DLOAD_FFTW2} = true ]]; then
   if [[ ! -d ${FFTW2_BUILD} ]]; then
     echo
-    echo "Downloading FFTW ${FFTW2_VERS}..."
+    echo "Downloading FFTW ${FFTW2_VER}..."
     echo
 
     mkdir -p ${BUILDDIR}
 
     # Download FFTW 2.X
-    wget "http://www.fftw.org/fftw-${FFTW2_VERS}.tar.gz" -P ${BUILDDIR}
-    tar -xzvf ${BUILDDIR}/fftw-${FFTW2_VERS}.tar.gz -C ${BUILDDIR}
-    rm -f ${BUILDDIR}/fftw-${FFTW2_VERS}.tar.gz
+    wget "http://www.fftw.org/fftw-${FFTW2_VER}.tar.gz" -P ${BUILDDIR}
+    tar -xzvf ${BUILDDIR}/fftw-${FFTW2_VER}.tar.gz -C ${BUILDDIR}
+    rm -f ${BUILDDIR}/fftw-${FFTW2_VER}.tar.gz
   fi
 fi
 
@@ -21,8 +21,15 @@ fi
 if [[ ${INSTALL_FFTW2} = true ]];
 then
     echo
-    echo "Installing FFTW ${FFTW2_VERS}..."
+    echo "Installing FFTW ${FFTW2_VER}..."
     echo
+
+    # Check for dependencies (OpenMPI this case)
+    if [[ -z "${OMPI_INSTALL}" || ! -d "${OMPI_INSTALL}" ]]; then
+      echo "OpenMPI is not installed!"
+      clean_up
+      exit 1
+    fi
 
     mkdir -p ${INSTALLDIR}
 
