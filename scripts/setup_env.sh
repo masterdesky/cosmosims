@@ -12,14 +12,14 @@
 
 # Adding entries here by running the installation script of the
 # basic applications
-export OMPI_INSTALL=/home/masterdesky/opt/openmpi-4.1.1
+export OMPI_INSTALL=/home/masterdesky/opt/openmpi-4.1.3
 export GSL1_INSTALL=/home/masterdesky/opt/gsl-1.9
 export GSL2_INSTALL=/home/masterdesky/opt/gsl-2.7
 export FFTW2_INSTALL=/home/masterdesky/opt/fftw-2.1.5
 export FFTW3_INSTALL=/home/masterdesky/opt/fftw-3.3.10
 export HWLOC_INSTALL=/home/masterdesky/opt/hwloc-2.6.0
 export LAT2_INSTALL=/home/masterdesky/opt/LATfield2
-export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.12.1
+export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.10.6
 
 
 # Adding binaries to $PATH variable
@@ -62,5 +62,3 @@ else
   clean_up
   exit 1
 fi
-## `conda.sh` should be sourced first if `conda` is ran from bash script
-source ${CONDAROOT}/etc/profile.d/conda.sh
