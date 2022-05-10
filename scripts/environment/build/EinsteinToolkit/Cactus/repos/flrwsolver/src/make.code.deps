@@ -1,0 +1,6 @@
+#
+# Added dependencies for FLRWSolver
+#
+
+# Add your flags for Python linking: output of 'python-config --cflags'
+CFLAGS+=
