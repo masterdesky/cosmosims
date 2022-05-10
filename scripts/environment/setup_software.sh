@@ -23,7 +23,7 @@ export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/software "parameters"
 
 # Setup bash environment for further commands
-# Normally this should be set up previously by installing the basic apps
+# Normally this should be set up previously by installing dependencies
 source ${SCRIPTDIR}/setup_env.sh
 
 

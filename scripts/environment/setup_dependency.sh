@@ -18,10 +18,14 @@ export ENVDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # The `SCRIPTDIR` directory will be defined as the directory that contains all
 # the scripts and folders that are used during the configuration and simulation
 # pipelines
-export SCRIPTDIR="$( dirname "${SIMDIR}" )"
+export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 
 # Parse input parameters
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/dependency "parameters"
+
+# Setup bash environment for further commands
+# Normally this should be set up previously by installing the basic apps
+source ${SCRIPTDIR}/setup_env.sh
 
 
 usage() {
@@ -54,7 +58,8 @@ clean_up() {
   rm ${ENVDIR}/dependency/${PARFILE}-temp.sh
 }
 
-FLAGS=dompi,iompi,dgsl1,igsl1,dgsl2,igsl2,dfftw2,ifftw2,dfftw3,ifftw3,dhwloc,ihwloc,dlat2,ilat2,dhdf5,ihdf5,help
+FLAGS="dompi,iompi,dgsl1,igsl1,dgsl2,igsl2,dfftw2,ifftw2,dfftw3,ifftw3,\
+dhwloc,ihwloc,dlat2,ilat2,dhdf5,ihdf5,help"
 # Call getopt to validate the provided input. 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
