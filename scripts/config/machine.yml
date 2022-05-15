@@ -1,0 +1,13 @@
+# Parameters to specify
+
+BUILDDIR    : ${HOME}/apps
+INSTALLDIR  : ${HOME}/opt
+BUILDSYS    : ${ENVDIR}/build
+
+# CONDAROOT
+# Path to the `conda` rootdir on the machine. Leave empty to search for conda
+# automatically on the machine in `PATH`.
+CONDAROOT   : 
+
+# Select a machine type
+COMPUTER    : home

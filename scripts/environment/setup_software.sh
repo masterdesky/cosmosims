@@ -22,7 +22,7 @@ export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 # Parse input parameters
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/software "parameters"
 # Parse data directory location
-source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing dependencies
@@ -63,7 +63,7 @@ usage() {
 
 clean_up() {
   # Delete created `parameters*.sh` file at the end of the script
-  rm ${SCRIPTDIR}/*-temp.sh
+  rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${ENVDIR}/software/*-temp.sh
 }
 
