@@ -1,5 +1,6 @@
 # 
 .vscode/
+*-temp*
 
 # http://www.gnu.org/software/automake
 
