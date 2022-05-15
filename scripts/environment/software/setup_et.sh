@@ -38,18 +38,19 @@ then
   ##
   ## This is done by adding it to the `manifest/einsteinttolkit.th` file, to
   ## the corresponding `EinsteinInitialData` section
-  cp ${BUILDSYS}/EinsteinToolkit/Cactus/manifest/einsteintoolkit.th \
-     ${BUILDDIR}/EinsteinToolkit/Cactus/manifest/
+  THORNPATH=EinsteinToolkit/Cactus/thornlists
+  cp ${BUILDSYS}/${THORNPATH}/einsteintoolkit.th \
+     ${BUILDDIR}/${THORNPATH}/
+  sed -i '/^EinsteinInitialData\/Exact/ { s|$|\nEinsteinInitialData\/flrwsolver|  }' \
+      ${BUILDDIR}/${THORNPATH}/einsteintoolkit.th
 
-  sed -i '#^EinsteinInitialData/TwoPunctures# { s|$|\nEinsteinInitialData/flrwsolver| }' \
-      ${BUILDDIR}/EinsteinToolkit/Cactus/manifest/einsteintoolkit.th
-  
   ## Setup conda env for ET + FLRWSolver
   if ! { conda env list | grep 'et-flrw'; } >/dev/null 2>&1; then
-      conda create --name et-flrw python python-configuration cffi numpy scipy -y
+      conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy -y
   fi
-  ## Setup Python 3.x linking
-  ### `conda.sh` should be sourced first if `conda` is ran from bash script
+
+  ## Setup Python 3.x linking for the FLRWSolver codes
+  ### `conda.sh` should be sourced first if `conda` is ran from a bash script
   source ${CONDAROOT}/etc/profile.d/conda.sh
   conda activate et-flrw
   ### Get compile parameters
@@ -61,24 +62,31 @@ then
   cp ${BUILDSYS}/${CFLAGSPATH} ${BUILDDIR}/${CFLAGSPATH}
   cp ${BUILDSYS}/${LDFLAGSPATH} ${BUILDDIR}/${LDFLAGSPATH}
   sed -i '/^CFLAGS/ { s|$|'"${PCFLAGS}"'| }' ${BUILDDIR}/${CFLAGSPATH}  # Exactly 0 space needed
+  #sed -i '/^CFLAGS/ { s|$| '"${PCFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}  # Exactly 1 space needed
   sed -i '/^LDFLAGS/ { s|$| '"${PLDFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}  # Exactly 1 space needed
-  
+
   ## Set path to FLRWSolver in `FLRWSolver/src/builder.py`
   flrwsolverpath=${BUILDDIR}/EinsteinToolkit/Cactus/repos/flrwsolver
   sed -i '/^flrwsolverpath/ { s|=.*|="'"${flrwsolverpath}"'"| }' ${flrwsolverpath}/src/builder.py
 
   ## Generate the static library linking
-  python ${flrwsolverpath}/src/builder.py
+  cd ${flrwsolverpath}/src
+  python3 ${flrwsolverpath}/src/builder.py
 
   ## Setup simfactory if it's ran for the first time
-  if [[ ! -f ${BUILDDIR}/EinsteinToolkit/Cactus/repos/simfactory2/etc/defs.local.ini ]]; then
+  cd ${BUILDDIR}/EinsteinToolkit/Cactus
+  if [[ ! -f ${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/etc/defs.local.ini ]]; then
     ${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/bin/sim setup
   fi
 
+  ## Setup 
+
   ## Build Cactus + FLRWSolver
   #${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/bin/sim build \
-  #        --thornlist=manifest/einsteintoolkit.th \
-  #        --optionlist=generic.cfg
+  #        --clean \
+  #        --thornlist=thornlists/einsteintoolkit.th \
+  #        --optionlist=generic.cfg \
+  #        --cores=8
 
   conda deactivate
   cd ${BUILDDIR}
