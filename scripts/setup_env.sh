@@ -22,12 +22,13 @@ export LAT2_INSTALL=/home/masterdesky/opt/LATfield2
 export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.10.6
 
 
-# Adding binaries to $PATH variable
+# Adding binaries to `PATH` variable
 if [[ ":${PATH}:" != *":${OMPI_INSTALL}/bin:"* ]]; then
 	export PATH="${OMPI_INSTALL}/bin:${PATH}"
 fi
 
-# Adding libraries to the $LD_LIBRARY_PATH variable
+
+# Adding libraries to the `LD_LIBRARY_PATH` variable
 for LIB_PATH in OMPI_INSTALL GSL1_INSTALL GSL2_INSTALL \
                 FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL; do
 	if [[ ":${LD_LIBRARY_PATH}:" != *":${!LIB_PATH}/lib:"* ]]; then
@@ -35,7 +36,9 @@ for LIB_PATH in OMPI_INSTALL GSL1_INSTALL GSL2_INSTALL \
 	fi
 done
 
-# Setting include paths for gcc
+
+# Setting include paths for GCC. Some software require the `C_INCLUDE_PATH` and
+# `CPLUS_INCLUDE_PATH` variables to be set
 for INCLUDE_PATH in LAT2_INSTALL FFTW2_INSTALL FFTW3_INSTALL HDF5_INSTALL; do
 	if [[ ":${C_INCLUDE_PATH}:" != *":${!INCLUDE_PATH}/include:"* ]]; then
 		export C_INCLUDE_PATH="${!INCLUDE_PATH}/include:${C_INCLUDE_PATH}"
@@ -46,19 +49,45 @@ for INCLUDE_PATH in LAT2_INSTALL FFTW2_INSTALL FFTW3_INSTALL HDF5_INSTALL; do
 done
 
 
-# Initialize conda for the shell
-## Get the location of `conda.sh`
-if [[ -d /usr/local/miniconda3 ]]; then
-  export CONDAROOT=/usr/local/miniconda3
-  echo "[INFO] Conda found at /usr/local/miniconda3"
-elif [[ -d /opt/conda ]]; then
-  export CONDAROOT=/opt/conda
-  echo "[INFO] Conda found at /opt/conda"
-elif [[ -d ${HOME}/miniconda3 ]]; then
-  export CONDAROOT=${HOME}/miniconda3
-  echo "[INFO] Conda found at ${HOME}/miniconda3"
+# Get `DATADIR` : The location of the data directory, where simulation software
+# saves its outputs. Defaults to `${HOME}/data`
+if [[ ! -z ${!COMPUTER} ]]; then
+  export DATADIR=${!COMPUTER}
 else
-  echo "[ERROR] Conda could not be found on the machine!" | ts "[%x %X]"
+  export DATADIR=${HOME}/data
+fi
+echo "[INFO] Data directory is at the following path: ${DATADIR}" \
+| ts "[%x %X]"
+
+
+# Get `CONDAROOT` : The sourcedir of conda on the current machine
+## A custom `CONDAROOT` can be set beforehand
+export CONDAROOT=""
+if [[ -z ${CONDAROOT} ]]; then
+  CONDAROOT_OPT=(
+    "/usr/local/miniconda3"
+    "${HOME}/miniconda3"
+    "/opt/conda"
+  )
+  for c in ${CONDAROOT_OPT[@]}; do
+    if [[ -f ${c}/bin/conda ]]; then
+      export CONDAROOT=${c}
+      break
+    fi
+  done
+fi
+## Check whether if specifying/finding conda was successful
+if [[ -z ${CONDAROOT} ]]; then
+  echo "[ERROR] Conda could not be found on the machine!" \
+  | ts "[%x %X]"
   clean_up
-  exit 1
+  exit 2
+elif [[ ! -f ${CONDAROOT}/bin/conda ]]; then
+  echo "[ERROR] Conda could not be found on the speified location!" \
+  | ts "[%x %X]"
+  clean_up
+  exit 2
+else
+  echo "[INFO] Conda found at ${CONDAROOT}!" \
+  | ts "[%x %X]"
 fi

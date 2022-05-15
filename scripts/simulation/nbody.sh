@@ -24,7 +24,8 @@ export PIPELINEDIR="$( dirname "${SCRIPTDIR}" )"
 
 # Parse input parameters
 source ${SCRIPTDIR}/environment/parse_yaml.sh ${SIMDIR} "parameters"
-source ${SCRIPTDIR}/environment/parse_yaml.sh ${SIMDIR} "datadir"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
 
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing the basic apps
@@ -52,6 +53,7 @@ usage() {
 
 clean_up() {
   # Delete created `*-temp.sh` files at the end of the script
+  rm ${SCRIPTDIR}/*-temp.sh
   rm ${SIMDIR}/*-temp.sh
 }
 

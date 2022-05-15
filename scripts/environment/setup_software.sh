@@ -2,7 +2,7 @@
 
 # ==============================================================================
 #
-#   start_software.sh
+#   setup_software.sh
 #
 #   Downloads and installs the requested simulation softwares.
 #
@@ -21,6 +21,8 @@ export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 
 # Parse input parameters
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/software "parameters"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
 
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing dependencies
@@ -61,7 +63,8 @@ usage() {
 
 clean_up() {
   # Delete created `parameters*.sh` file at the end of the script
-  rm ${ENVDIR}/software/${PARFILE}-temp.sh
+  rm ${SCRIPTDIR}/*-temp.sh
+  rm ${ENVDIR}/software/*-temp.sh
 }
 
 

@@ -2,7 +2,7 @@
 
 # ==============================================================================
 #
-#   start_dependency.sh
+#   setup_dependency.sh
 #
 #   Downloads and installs the requested dependencies required for
 #   most cosmological softwares.
@@ -22,6 +22,8 @@ export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 
 # Parse input parameters
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/dependency "parameters"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
 
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing the basic apps
@@ -55,7 +57,8 @@ usage() {
 
 clean_up() {
   # Delete created `parameters*.sh` file at the end of the script
-  rm ${ENVDIR}/dependency/${PARFILE}-temp.sh
+  rm ${SCRIPTDIR}/*-temp.sh
+  rm ${ENVDIR}/dependency/*-temp.sh
 }
 
 FLAGS="dompi,iompi,dgsl1,igsl1,dgsl2,igsl2,dfftw2,ifftw2,dfftw3,ifftw3,\

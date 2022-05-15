@@ -1,2 +1,4 @@
+# Location of data directory can be defined for specific computers here
+home          : ${HOME}/data
 elte_default  : /mnt/local/scratch/$(whoami)/data
 v100          : /mnt/local/scratch_sata_stripe/scratch/$(whoami)/data

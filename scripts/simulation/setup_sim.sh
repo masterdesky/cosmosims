@@ -9,14 +9,6 @@
 # 
 # ==============================================================================
 
-# `DATADIR` location depending where the simulations run. It matters only for
-# specific servers.
-if [[ ! -z ${!COMPUTER} ]]; then
-  export DATADIR=${!COMPUTER}
-else
-  export DATADIR=${HOME}/data
-fi
-
 
 # Check if parameters are correctly set
 ##  1. NPART
