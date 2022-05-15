@@ -61,20 +61,9 @@ echo "[INFO] Data directory is at the following path: ${DATADIR}" \
 
 
 # Get `CONDAROOT` : The sourcedir of conda on the current machine
-## A custom `CONDAROOT` can be set beforehand
-export CONDAROOT=""
 if [[ -z ${CONDAROOT} ]]; then
-  CONDAROOT_OPT=(
-    "/usr/local/miniconda3"
-    "${HOME}/miniconda3"
-    "/opt/conda"
-  )
-  for c in ${CONDAROOT_OPT[@]}; do
-    if [[ -f ${c}/bin/conda ]]; then
-      export CONDAROOT=${c}
-      break
-    fi
-  done
+  # Add `-p` flag to `which` if changing the shebang from `bash` to `zsh`
+  export CONDAROOT=$(echo $(which conda) | rev | cut -d'/' -f3- | rev)
 fi
 ## Check whether if specifying/finding conda was successful
 if [[ -z ${CONDAROOT} ]]; then
@@ -82,7 +71,7 @@ if [[ -z ${CONDAROOT} ]]; then
   | ts "[%x %X]"
   clean_up
   exit 2
-elif [[ ! -f ${CONDAROOT}/bin/conda ]]; then
+elif [[ ! -f ${CONDAROOT}/condabin/conda ]]; then
   echo "[ERROR] Conda could not be found on the speified location!" \
   | ts "[%x %X]"
   clean_up
