@@ -10,7 +10,7 @@ This can be setup via
     ```bash
     sudo apt install build-essential gfortran
     ```
-- It is possible that C headers should be installed separately via
+- I various circumstances C headers may be installed separately via
     ```bash
     sudo apt install libc-dev
     ```
@@ -24,6 +24,18 @@ This can be setup via
     ```bash
     sudo apt install git
     ```
+
+- Wget and cURL that can be installed via
+    ```bash
+    sudo apt install wget curl
+    ```
+
+- Conda that can be installed on Linux using the install script from conda's website via
+    ```bash
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    bash Miniconda3-latest-Linux-x86_64.sh
+    ```
+    and then following the prompts
 
 - Moreutils to display time in terminal info using `ts` can be installed via
     ```bash
@@ -40,6 +52,11 @@ This can be setup via
     sudo apt install libtool texinfo
     ```
 
+- EinsteinToolkit requires the OpenBLAS library that can be installed via
+    ```bash
+    sudo apt install libopenblas-dev
+    ```
+
 - The FLRWSolver thorn for the Cactus framework requires the linking of static
 Python libraries manually. This is done by the `python3-config` executable, and
 it requires Python headers to be installed on the corresponding include paths.
@@ -48,9 +65,4 @@ this step can be skipped. Otherwise, Python headers can be installed system-wide
 via
     ```bash
     sudo apt install python3-dev
-    ```
-
-- EinsteinToolkit requires the OpenBLAS library that can be installed via
-    ```bash
-    sudo apt install libopenblas-dev
     ```
