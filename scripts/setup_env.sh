@@ -63,7 +63,8 @@ echo "[INFO] Data directory is at the following path: ${DATADIR}" \
 # Get `CONDAROOT` : The sourcedir of conda on the current machine
 if [[ -z ${CONDAROOT} ]]; then
   # Add `-p` flag to `which` if changing the shebang from `bash` to `zsh`
-  export CONDAROOT=$(echo $(which conda) | rev | cut -d'/' -f3- | rev)
+  CONDAPATH=$(which conda)
+  export CONDAROOT=${CONDAPATH%/*/*}
 fi
 ## Check whether if specifying/finding conda was successful
 if [[ -z ${CONDAROOT} ]]; then

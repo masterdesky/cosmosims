@@ -34,7 +34,8 @@ if [[ ${LBOX_PER} < 0 || ${LBOX_PER} < ${LBOX} ]]; then
   clean_up
   exit 2
 fi
-##  4.  MBINS
+##  4.  MBINS : - Number of different masses that given to particles in N-body
+##                simulations that support this feature (Eg. StePS, GADGET)
 if [[ ${MBINS} < 1 ]]; then
   echo "[ERROR] MBINS should be an integer greater than 0!" \
   | ts "[%x %X]"
