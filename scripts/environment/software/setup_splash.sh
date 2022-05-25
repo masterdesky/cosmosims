@@ -30,7 +30,6 @@ if [[ ${INSTALL_SP} = true ]]; then
   echo "Installing SPLASH..."
   echo
 
-  # (Re)installing SPLASH
   cd ${SP_BUILD}
   # Uninstall previous version
   if [ -f ${SP_BUILD}/m.log ]; then
