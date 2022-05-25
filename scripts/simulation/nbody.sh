@@ -22,18 +22,6 @@ export SCRIPTDIR="$( dirname "${SIMDIR}" )"
 # includes the `scripts`, `logs` and `data` directories.
 export PIPELINEDIR="$( dirname "${SCRIPTDIR}" )"
 
-# Parse input parameters
-source ${SCRIPTDIR}/environment/parse_yaml.sh ${SIMDIR} "parameters"
-# Parse data directory location
-source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
-
-# Setup bash environment for further commands
-# Normally this should be set up previously by installing the basic apps
-source ${SCRIPTDIR}/environment/setup_env.sh
-
-# Set environmental variables for the simulations
-source ${SIMDIR}/setup_sim.sh
-
 
 usage() {
   echo "Usage: $0 [ --arguments (...) ]"
@@ -53,9 +41,19 @@ usage() {
 
 clean_up() {
   # Delete created `*-temp.sh` files at the end of the script
-  rm ${SCRIPTDIR}/*-temp.sh
+  rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${SIMDIR}/*-temp.sh
 }
+
+
+# Parse input parameters
+source ${SCRIPTDIR}/parse_yaml.sh ${SIMDIR} "parameters"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
+
+# Setup bash environment for further commands
+# Normally this should be set up previously by installing the basic apps
+source ${SCRIPTDIR}/setup_env.sh
 
 
 FLAGS="calc-missing,g2,g4,gevol,cgr,et,arepo,help"
@@ -145,7 +143,7 @@ elif [[ ${ET} = true ]]; then
 elif [[ ${AREPO} = true ]]; then
   echo "[NBODY] AREPO hydro simulation with newtonian physics." \
   | ts "[%x %X]"
-  source ${SIMDIR}/nbody_sim/nbody_et.sh
+  source ${SIMDIR}/nbody_sim/nbody_arepo.sh
 fi
 
 

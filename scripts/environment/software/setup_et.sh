@@ -1,33 +1,39 @@
 #!/bin/bash
 
-# Downloading StePS
-if [[ ${DLOAD_ET} = true ]]; then
-  if [[ ! -d ${BUILDDIR}/EinsteinToolkit ]]; then
+
+if [[ ${INSTALL_ET} = true ]];
+then
+  ET_BUILD=${BUILDDIR}/EinsteinToolkit
+  # Downloading EinsteinToolkit
+  if [[ ! -d ${ET_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading EinsteinToolkit with FLRWSolver..."
     echo
 
-    mkdir -p ${BUILDDIR}/EinsteinToolkit
+    # If previous download exists, delete it first (relevant in case of forced install)
+    if [[ -d ${ET_BUILD} ]]; then
+      rm -rf ${ET_BUILD}
+    fi
+
+    mkdir -p ${ET_BUILD}
 
     # Download the EinsteinToolkit
-    cd ${BUILDDIR}/EinsteinToolkit
+    cd ${ET_BUILD}
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/ET_2021_11/GetComponents
     chmod a+x GetComponents
     ./GetComponents --parallel https://bitbucket.org/einsteintoolkit/manifest/raw/ET_2021_11/einsteintoolkit.th
 
     # Download the FLRWsolver
-    cd ${BUILDDIR}/EinsteinToolkit/Cactus/repos
+    cd ${ET_BUILD}/Cactus/repos
     git clone https://github.com/hayleyjm/FLRWSolver_public.git flrwsolver
-    cd ${BUILDDIR}/EinsteinToolkit/Cactus/arrangements/EinsteinInitialData
+    cd ${ET_BUILD}/Cactus/arrangements/EinsteinInitialData
     ln -s ../../repos/flrwsolver flrwsolver
 
     cd ${BUILDDIR}
   fi
-fi
+  
 
-
-if [[ ${INSTALL_ET} = true ]];
-then
+  # Installing EinsteinToolkit
   echo
   echo "Installing EinsteinToolkit with FLRWSolver..."
   echo
@@ -46,7 +52,7 @@ then
 
   ## Setup conda env for ET + FLRWSolver
   if ! { conda env list | grep 'et-flrw'; } >/dev/null 2>&1; then
-      conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy -y
+      conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy h5py -y
   fi
 
   ## Setup Python 3.x linking for the FLRWSolver codes
@@ -54,40 +60,39 @@ then
   source ${CONDAROOT}/etc/profile.d/conda.sh
   conda activate et-flrw
   ### Get compile parameters
-  PCFLAGS="$(python3-config --cflags)"
-  PLDFLAGS="$(python3-config --ldflags)"
+  PCFLAGS="$(python3-config --cflags --embed)"
+  PLDFLAGS="$(python3-config --ldflags --embed) -lgfortran"
+  LIBFLAGS="$(python3-config --libs --embed) -lgfortran"
   ### Write these compile parameters to the appropriate files
   CFLAGSPATH=EinsteinToolkit/Cactus/repos/flrwsolver/src/make.code.deps
   LDFLAGSPATH=EinsteinToolkit/Cactus/simfactory/mdb/optionlists/generic.cfg
   cp ${BUILDSYS}/${CFLAGSPATH} ${BUILDDIR}/${CFLAGSPATH}
   cp ${BUILDSYS}/${LDFLAGSPATH} ${BUILDDIR}/${LDFLAGSPATH}
   sed -i '/^CFLAGS/ { s|$|'"${PCFLAGS}"'| }' ${BUILDDIR}/${CFLAGSPATH}  # Exactly 0 space needed
-  #sed -i '/^CFLAGS/ { s|$| '"${PCFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}  # Exactly 1 space needed
   sed -i '/^LDFLAGS/ { s|$| '"${PLDFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}  # Exactly 1 space needed
+  sed -i '/^LDFLAGS/ { s|$|\nLIBS = '"${LIBFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}
 
   ## Set path to FLRWSolver in `FLRWSolver/src/builder.py`
-  flrwsolverpath=${BUILDDIR}/EinsteinToolkit/Cactus/repos/flrwsolver
-  sed -i '/^flrwsolverpath/ { s|=.*|="'"${flrwsolverpath}"'"| }' ${flrwsolverpath}/src/builder.py
+  FLRWSOLVERPATH=${ET_BUILD}/Cactus/repos/flrwsolver
+  sed -i '/^FLRWSOLVERPATH/ { s|=.*|="'"${FLRWSOLVERPATH}\/"'"| }' ${FLRWSOLVERPATH}/src/builder.py
 
   ## Generate the static library linking
-  cd ${flrwsolverpath}/src
-  python3 ${flrwsolverpath}/src/builder.py
+  cd ${FLRWSOLVERPATH}/src
+  python3 ${FLRWSOLVERPATH}/src/builder.py
 
   ## Setup simfactory if it's ran for the first time
-  cd ${BUILDDIR}/EinsteinToolkit/Cactus
-  if [[ ! -f ${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/etc/defs.local.ini ]]; then
-    ${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/bin/sim setup
+  cd ${ET_BUILD}/Cactus
+  if [[ ! -f ${ET_BUILD}/Cactus/simfactory/etc/defs.local.ini ]]; then
+    ${ET_BUILD}/Cactus/simfactory/bin/sim setup
   fi
 
-  ## Setup 
-
   ## Build Cactus + FLRWSolver
-  #${BUILDDIR}/EinsteinToolkit/Cactus/simfactory/bin/sim build \
-  #        --clean \
-  #        --thornlist=thornlists/einsteintoolkit.th \
-  #        --optionlist=generic.cfg \
-  #        --cores=8
-
+  ${ET_BUILD}/Cactus/simfactory/bin/sim build \
+          --thornlist=thornlists/einsteintoolkit.th \
+          --optionlist=generic.cfg \
+          --cores=8
+#          --clean \
+  
   conda deactivate
   cd ${BUILDDIR}
 fi
