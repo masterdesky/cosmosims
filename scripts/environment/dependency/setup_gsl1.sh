@@ -1,12 +1,17 @@
 #!/bin/bash
 
 
-# Downloading and unpacking GSL 1.X if necessary
-if [[ ${DLOAD_GSL1} = true ]]; then
-  if [[ ! -d ${GSL1_BUILD} ]]; then
+if [[ ${INSTALL_GSL1} = true ]]; then
+  # Downloading GNU Scientific Library 1.X
+  if [[ ! -d ${GSL1_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading GSL ${GSL1_VER}..."
     echo
+
+    # If previous download exists, delete it first (relevant in case of forced install)
+    if [[ -d ${GSL1_BUILD} ]]; then
+      rm -rf ${GSL1_BUILD}
+    fi
 
     mkdir -p ${BUILDDIR}
 
@@ -15,25 +20,23 @@ if [[ ${DLOAD_GSL1} = true ]]; then
     tar -xzvf ${BUILDDIR}/gsl-${GSL1_VER}.tar.gz -C ${BUILDDIR}
     rm -f ${BUILDDIR}/gsl-${GSL1_VER}.tar.gz
   fi
-fi
 
+  # Installing GNU Scientific Library 1.X
+  echo
+  echo "Installing GSL ${GSL1_VER}..."
+  echo
 
-if [[ ${INSTALL_GSL1} = true ]];
-then
-    echo
-    echo "Installing GSL ${GSL1_VER}..."
-    echo
+  mkdir -p ${INSTALLDIR}
 
-    mkdir -p ${INSTALLDIR}
-
-    # (Re)install GSL 1.X
-    cd ${GSL1_BUILD}
-    if [ -f ${GSL1_BUILD}/mi.log ]; then
-        make uninstall |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mu.log)
-        make clean |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/cl.log)
-    fi
-    ./configure --prefix=${GSL1_INSTALL} |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/c.log)
-    make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/m.log)
-    make install |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mi.log)
-    cd ${BUILDDIR}
+  cd ${GSL1_BUILD}
+  # Uninstall previous version
+  if [ -f ${GSL1_BUILD}/mi.log ]; then
+      make uninstall |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mu.log)
+      make clean |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/cl.log)
+  fi
+  # Install GSL 1.X
+  ./configure --prefix=${GSL1_INSTALL} |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/c.log)
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/m.log)
+  make install |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mi.log)
+  cd ${BUILDDIR}
 fi
