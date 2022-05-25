@@ -56,7 +56,7 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 source ${SCRIPTDIR}/setup_env.sh
 
 
-FLAGS="iompi,igsl1,igsl2,ifftw2,ifftw3,ihwloc,ilat2,ihdf5,help"
+FLAGS="iompi,igsl1,igsl2,ifftw2,ifftw3,ihwloc,ilat2,ihdf5,force,help"
 # Call getopt to validate the provided input. 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
