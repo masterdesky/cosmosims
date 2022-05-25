@@ -38,18 +38,18 @@ if [[ ${INSTALL_FFTW2} = true ]]; then
   cd ${FFTW2_BUILD}
   # Uninstall trailing 32 and 64 bit versions
   if [ -f ${FFTW2_BUILD}/mi32.log ]; then
-      ./configure --prefix=${FFTW2_INSTALL} \
-                  --enable-mpi --enable-float --enable-type-prefix \
-                  LDFLAGS=-L${OMPI_INSTALL}/lib CPPFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
-      make uninstall |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/cl.log)
+    ./configure --prefix=${FFTW2_INSTALL} \
+                --enable-mpi --enable-float --enable-type-prefix \
+                LDFLAGS=-L${OMPI_INSTALL}/lib CPPFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
+    make uninstall |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/cl.log)
   fi
   if [ -f ${FFTW2_BUILD}/mi64.log ]; then
-      ./configure --prefix=${FFTW2_INSTALL} \
-                  --enable-mpi --enable-type-prefix \
-                  LDFLAGS=-L${OMPI_INSTALL}/lib CPPFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
-      make uninstall |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/cl.log)
+    ./configure --prefix=${FFTW2_INSTALL} \
+                --enable-mpi --enable-type-prefix \
+                LDFLAGS=-L${OMPI_INSTALL}/lib CPPFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
+    make uninstall |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${FFTW2_BUILD}/cl.log)
   fi
   # Install FFTW 2.X with 32 bit precision
   ./configure --prefix=${FFTW2_INSTALL} \

@@ -31,8 +31,8 @@ if [[ ${INSTALL_GSL1} = true ]]; then
   cd ${GSL1_BUILD}
   # Uninstall previous version
   if [ -f ${GSL1_BUILD}/mi.log ]; then
-      make uninstall |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/cl.log)
+    make uninstall |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/cl.log)
   fi
   # Install GSL 1.X
   ./configure --prefix=${GSL1_INSTALL} |& tee >(ts "[%x %X]" > ${GSL1_BUILD}/c.log)

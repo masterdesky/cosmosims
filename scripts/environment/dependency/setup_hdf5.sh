@@ -31,8 +31,8 @@ if [[ ${INSTALL_HDF5} = true ]]; then
   cd ${HDF5_BUILD}
   # Uninstall previous version
   if [[ -f ${HDF5_BUILD}/mi.log ]]; then
-      make uninstall |& tee >(ts "[%x %X]" > ${HDF5_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${HDF5_BUILD}/cl.log)
+    make uninstall |& tee >(ts "[%x %X]" > ${HDF5_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${HDF5_BUILD}/cl.log)
   fi
   # Install HDF5
   ./configure --prefix=${HDF5_INSTALL} \

@@ -31,8 +31,8 @@ if [[ ${INSTALL_HWLOC} = true ]]; then
   cd ${HWLOC_BUILD}
   # Uninstall previous version
   if [ -f ${HWLOC_BUILD}/mi.log ]; then
-      make uninstall |& tee >(ts "[%x %X]" > ${HWLOC_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${HWLOC_BUILD}/cl.log)
+    make uninstall |& tee >(ts "[%x %X]" > ${HWLOC_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${HWLOC_BUILD}/cl.log)
   fi
   # Install hwloc
   ./configure --prefix=${HWLOC_INSTALL} |& tee >(ts "[%x %X]" > ${HWLOC_BUILD}/c.log)

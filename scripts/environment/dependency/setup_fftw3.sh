@@ -38,18 +38,18 @@ if [[ ${INSTALL_FFTW3} = true ]]; then
   cd ${FFTW3_BUILD}
   # Uninstall trailing 32 and 64 bit versions
   if [ -f ${FFTW3_BUILD}/mi32.log ]; then
-      ./configure --prefix=${FFTW3_INSTALL} \
-                  --enable-mpi --enable-float --enable-threads \
-                  LDFLAGS=-L${OMPI_INSTALL}/lib CFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
-      make uninstall |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/cl.log)
+    ./configure --prefix=${FFTW3_INSTALL} \
+                --enable-mpi --enable-float --enable-threads \
+                LDFLAGS=-L${OMPI_INSTALL}/lib CFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
+    make uninstall |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/cl.log)
   fi
   if [ -f ${FFTW3_BUILD}/mi64.log ]; then
-      ./configure --prefix=${FFTW3_INSTALL} \
-                  --enable-mpi --enable-threads \
-                  LDFLAGS=-L${OMPI_INSTALL}/lib CFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
-      make uninstall |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/mu.log)
-      make clean |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/cl.log)
+    ./configure --prefix=${FFTW3_INSTALL} \
+                --enable-mpi --enable-threads \
+                LDFLAGS=-L${OMPI_INSTALL}/lib CFLAGS=-I${OMPI_INSTALL}/include  # No need for logging
+    make uninstall |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/mu.log)
+    make clean |& tee >(ts "[%x %X]" > ${FFTW3_BUILD}/cl.log)
   fi
   # Install FFTW 3.X with 32 bit precision
   ./configure --prefix=${FFTW3_INSTALL} \
