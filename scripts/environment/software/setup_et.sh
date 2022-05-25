@@ -52,7 +52,7 @@ then
 
   ## Setup conda env for ET + FLRWSolver
   if ! { conda env list | grep 'et-flrw'; } >/dev/null 2>&1; then
-      conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy h5py -y
+    conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy h5py -y
   fi
 
   ## Setup Python 3.x linking for the FLRWSolver codes
@@ -83,15 +83,17 @@ then
   ## Setup simfactory if it's ran for the first time
   cd ${ET_BUILD}/Cactus
   if [[ ! -f ${ET_BUILD}/Cactus/simfactory/etc/defs.local.ini ]]; then
-    ${ET_BUILD}/Cactus/simfactory/bin/sim setup
+    ${ET_BUILD}/Cactus/simfactory/bin/sim setup \
+    |& tee >(ts "[%x %X]" > ${ET_BUILD}/setup.log)
   fi
 
   ## Build Cactus + FLRWSolver
   ${ET_BUILD}/Cactus/simfactory/bin/sim build \
           --thornlist=thornlists/einsteintoolkit.th \
           --optionlist=generic.cfg \
-          --cores=8
-#          --clean \
+          --cores=${N_CPUS}
+          --clean \
+    |& tee >(ts "[%x %X]" > ${ET_BUILD}/m.log)
   
   conda deactivate
   cd ${BUILDDIR}
