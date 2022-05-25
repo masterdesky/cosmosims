@@ -20,15 +20,6 @@ export ENVDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # pipelines
 export SCRIPTDIR="$( dirname "${ENVDIR}" )"
 
-# Parse input parameters
-source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/dependency "parameters"
-# Parse data directory location
-source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
-
-# Setup bash environment for further commands
-# Normally this should be set up previously by installing the basic apps
-source ${SCRIPTDIR}/setup_env.sh
-
 
 usage() {
   echo "Usage: $0 [ --arguments (...) ]"
@@ -60,6 +51,17 @@ clean_up() {
   rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${ENVDIR}/dependency/*-temp.sh
 }
+
+
+# Parse input parameters
+source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/dependency "parameters"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
+
+# Setup bash environment for further commands
+# Normally this should be set up previously by installing the basic apps
+source ${SCRIPTDIR}/setup_env.sh
+
 
 FLAGS="dompi,iompi,dgsl1,igsl1,dgsl2,igsl2,dfftw2,ifftw2,dfftw3,ifftw3,\
 dhwloc,ihwloc,dlat2,ilat2,dhdf5,ihdf5,help"
