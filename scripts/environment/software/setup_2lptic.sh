@@ -1,12 +1,11 @@
 #!/bin/bash
 
 
-# Donwloading 2LPT-IC
 if [[ ${INSTALL_2LPT} = true ]];
 then
-  2LPT_BUILD=${BUILDDIR}/2LPT-IC
+  LPT_BUILD=${BUILDDIR}/2LPT-IC
   # Downloading 2LPT-IC
-  if [[ ! -d ${2LPT_BUILD} || ${FORCE} = true ]]; then
+  if [[ ! -d ${LPT_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading 2LPT-IC..."
     echo
@@ -25,7 +24,7 @@ then
     wget "http://cosmo.nyu.edu/roman/2LPT/2LPTic.tar.gz" --no-check-certificate -P ${BUILDDIR}
     tar -xzvf ${BUILDDIR}/2LPTic.tar.gz -C ${BUILDDIR}
     rm -f ${BUILDDIR}/2LPTic.tar.gz
-    mv ${BUILDDIR}/2LPTic ${2LPT_BUILD}
+    mv ${BUILDDIR}/2LPTic ${LPT_BUILD}
   fi
 
 
@@ -34,19 +33,19 @@ then
   echo "Installing 2LPT-IC..."
   echo
 
-  cd ${2LPT_BUILD}
+  cd ${LPT_BUILD}
   # Uninstall previous version
-  if [[ -f ${2LPT_BUILD}/m.log ]]; then
-      make clean |& tee >(ts "[%x %X]" > ${2LPT_BUILD}/cl.log)
+  if [[ -f ${LPT_BUILD}/m.log ]]; then
+      make clean |& tee >(ts "[%x %X]" > ${LPT_BUILD}/cl.log)
   fi
   ## Prepare Makefile
-  cp ${BUILDSYS}/2LPT-IC/Makefile ${2LPT_BUILD}/
-  sed -i '/^GSL_LIBS/ { s|$| -L'"${GSL1_INSTALL}"'/lib|g }' ${2LPT_BUILD}/Makefile
-  sed -i '/^GSL_INCL/ { s|$| -I'"${GSL1_INSTALL}"'/include|g }' ${2LPT_BUILD}/Makefile
-  sed -i '/^FFTW_LIBS/ { s|$| -L'"${FFTW2_INSTALL}"'/lib|g }' ${2LPT_BUILD}/Makefile
-  sed -i '/^FFTW_INCL/ { s|$| -I'"${FFTW2_INSTALL}"'/include|g }' ${2LPT_BUILD}/Makefile
-  sed -i '/^MPICHLIB/ { s|$| -L'"${OMPI_INSTALL}"'/lib|g }' ${2LPT_BUILD}/Makefile
+  cp ${BUILDSYS}/2LPT-IC/Makefile ${LPT_BUILD}/
+  sed -i '/^GSL_LIBS/ { s|$| -L'"${GSL1_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
+  sed -i '/^GSL_INCL/ { s|$| -I'"${GSL1_INSTALL}"'/include|g }' ${LPT_BUILD}/Makefile
+  sed -i '/^FFTW_LIBS/ { s|$| -L'"${FFTW2_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
+  sed -i '/^FFTW_INCL/ { s|$| -I'"${FFTW2_INSTALL}"'/include|g }' ${LPT_BUILD}/Makefile
+  sed -i '/^MPICHLIB/ { s|$| -L'"${OMPI_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
   ## Install 2LPT-IC
-  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${2LPT_BUILD}/m.log)
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${LPT_BUILD}/m.log)
   cd ${BUILDDIR}
 fi
