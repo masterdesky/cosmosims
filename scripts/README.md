@@ -20,6 +20,11 @@ This can be setup via
     sudo apt install automake autoconf libtool libedit
     ```
 
+- `pkg-config` that can be installed via
+    ```bash
+    sudo apt install pkg-config
+    ```
+
 - Git that can be installed via
     ```bash
     sudo apt install git

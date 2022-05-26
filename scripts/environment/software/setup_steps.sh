@@ -1,9 +1,5 @@
 #!/bin/bash
 
-if [[ ${DLOAD_STEPS} = true ]]; then
-
-fi
-
 
 if [[ ${INSTALL_STEPS} = true ]];
 then
