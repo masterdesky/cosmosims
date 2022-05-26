@@ -1,8 +1,14 @@
 #!/bin/bash
 
-# Downloading StePS
 if [[ ${DLOAD_STEPS} = true ]]; then
-  if [[ ! -d ${BUILDDIR}/StePS ]]; then
+
+fi
+
+
+if [[ ${INSTALL_STEPS} = true ]];
+then
+  # Downloading StePS
+  if [[ ! -d ${BUILDDIR}/StePS || ${FORCE} = true ]]; then
     echo
     echo "Downloading StePS..."
     echo
@@ -13,17 +19,15 @@ if [[ ${DLOAD_STEPS} = true ]]; then
 
     cd ${BUILDDIR}
   fi
-fi
 
 
-if [[ ${INSTALL_STEPS} = true ]];
-then
+  # Installing StePS
   echo
   echo "Installing StePS..."
   echo
 
-  # (Re)installing StePS
   cd ${BUILDDIR}/StePS/StePS/src
+  # Uninstall previous version
   if [[ -f ${BUILDDIR}/StePS/StePS/src/m.log ]]; then
       make clean |& tee >(ts "[%x %X]" > ${BUILDDIR}/StePS/StePS/src/cl.log)
   fi
