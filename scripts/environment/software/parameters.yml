@@ -6,6 +6,7 @@ COMPUTER    : home
 
 # VERSIONS OF BASIC APPS
 GV_VER      : 1.1.2
+GEVOL_VER   : 1.2
 
 # TECHNICAL PARAMETERS
-N_CPUS      : 32
+N_CPUS      : 8

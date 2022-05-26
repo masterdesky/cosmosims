@@ -1,36 +1,37 @@
 #!/bin/bash
 
-# Donwloading GenPK
-if [[ ${DLOAD_GENPK} = true ]]; then
-  if [[ ! -d ${BUILDDIR}/GenPK ]]; then
+
+if [[ ${INSTALL_GENPK} = true ]];
+then
+  GPK_BUILD=${BUILDDIR}/GenPK
+  # Downloading GenPK
+  if [[ ! -d ${CPK_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading GenPK..."
     echo
 
     mkdir -p ${BUILDDIR}
 
-    git clone https://github.com/sbird/GenPK.git ${BUILDDIR}/GenPK
-    cd ${BUILDDIR}/GenPK
+    git clone https://github.com/sbird/GenPK.git ${CPK_BUILD}
+    cd ${CPK_BUILD}
     git submodule update --init --recursive
   fi
-fi
 
 
-if [[ ${INSTALL_GENPK} = true ]];
-then
+  # Installing GenPk
   echo
   echo "Installing GenPK..."
   echo
 
-  # (Re)installing GenPK
-  cd ${BUILDDIR}/GenPK
-  if [[ -f ${BUILDDIR}/GenPK/m.log ]]; then
-      make clean |& tee >(ts "[%x %X]" > ${BUILDDIR}/GenPK/cl.log)
+  cd ${CPK_BUILD}
+  # Uninstall previous version
+  if [[ -f ${CPK_BUILD}/m.log ]]; then
+      make clean |& tee >(ts "[%x %X]" > ${CPK_BUILD}/cl.log)
   fi
-  cd ${BUILDDIR}/GenPK
+  cd ${CPK_BUILD}
 
   # Build GenPK
-  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${BUILDDIR}/GenPK/m.log)
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${CPK_BUILD}/m.log)
 
   cd ${BUILDDIR}
 fi
