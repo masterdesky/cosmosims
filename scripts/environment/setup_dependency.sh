@@ -48,6 +48,8 @@ clean_up() {
 
 # Parse input parameters
 source ${SCRIPTDIR}/parse_yaml.sh ${ENVDIR}/dependency "parameters"
+# Parse machine parameters
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "machine"
 # Parse data directory location
 source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 

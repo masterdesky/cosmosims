@@ -11,3 +11,7 @@ CONDAROOT   :
 
 # Select a machine type
 COMPUTER    : home
+
+# Number of CPUs and GPUs (if available) used for various tasks
+N_CPUS      : 8
+N_GPUS      : 1
