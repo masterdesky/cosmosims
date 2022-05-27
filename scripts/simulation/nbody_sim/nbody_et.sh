@@ -10,7 +10,7 @@ conda activate et-flrw
 PYTHONPATH=$(which python3)
 PYTHONPATH=${PYTHONPATH%/*/*}
 if [[ ":${LD_LIBRARY_PATH}:" != *":${PYTHONPATH}/lib:"* ]]; then
-  export LD_LIBRARY_PATH="${PYTHONPATH}/lib:${LD_LIBRARY_PATH}"
+  export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${PYTHONPATH}/lib"
 fi
 echo ${LD_LIBRARY_PATH}
 
@@ -25,14 +25,15 @@ ETPARFILE=FLRW_powerspectrum
 ./simfactory/bin/sim create-run ${PROGRAMNAME} \
         --parfile ${FLRWSOLVERPATH}/par/${ETPARFILE}.par \
         --cores=8 \
-        --walltime=0:05:00
+        --walltime=0:05:00 \
+|& tee >(ts "[%x %X]" > ${DATADIR}/${PROGRAMNAME}/run.log)
 
 
 # Prepare simulation output for visualization with `splash`
 cd ${OUTDIR}/output-0000/${ETPARFILE}/
 python3 ${FLRWSOLVERPATH}/tools/split_HDF5_per_iteration3.py
 
-#Z=1200
-#splash -cactus_hdf5 ${ETPARFILE}_it00${Z}
+Z=1200
+splash -cactus_hdf5 ${ETPARFILE}_it00${Z}
 
 conda deactivate

@@ -74,7 +74,7 @@ then
 
   ## Set path to FLRWSolver in `FLRWSolver/src/builder.py`
   FLRWSOLVERPATH=${ET_BUILD}/Cactus/repos/flrwsolver
-  sed -i '/^FLRWSOLVERPATH/ { s|=.*|="'"${FLRWSOLVERPATH}\/"'"| }' ${FLRWSOLVERPATH}/src/builder.py
+  sed -i '/^flrwsolverpath/ { s|=.*|="'"${FLRWSOLVERPATH}\/"'"| }' ${FLRWSOLVERPATH}/src/builder.py
 
   ## Generate the static library linking
   cd ${FLRWSOLVERPATH}/src
@@ -101,8 +101,8 @@ then
           --thornlist=thornlists/einsteintoolkit.th \
           --optionlist=generic.cfg \
           --cores=${N_CPUS} \
-    |& tee >(ts "[%x %X]" > ${ET_BUILD}/m.log)
-#          --clean \
+          --clean \
+  |& tee >(ts "[%x %X]" > ${ET_BUILD}/m.log)
   
   conda deactivate
   cd ${BUILDDIR}
