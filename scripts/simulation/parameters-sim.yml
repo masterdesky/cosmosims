@@ -1,16 +1,11 @@
-# BUILD LOCATION OF SOFTWARES USED FOR THE SIMULATIONS
-BUILDDIR    : ${HOME}/apps
-LOGDIR      : ${PIPELINEDIR}/logs
-COMPUTER    : home
-
-# LOCATIONS OF VOLUME FILES THAT ARE IMPORTANT FOR THE SIMULATION
-## Automatically filled
+# Locations of glass files and ICs if they're available for the simulation
+## (Values are automatically filled if they're needed)
 GLASS_IC    : /home/masterdesky/data/GADGET2/Glass_ICs/Glass_IC_N262144_L500_M1_min1
 GLASS       : /home/masterdesky/data/GADGET2/Simulations/Glasses/Glasses_N262144_L500_M1/output/Glass_N262144_L500_M1_min1
 IC          : /home/masterdesky/data/2LPT-IC/ICs/IC_N262144_L1000_M1/IC_N262144_L500_M1_min1
 
 # TECHNICAL PARAMETERS
-N_CPUS        : 4
+N_CPUS        : 8
 N_GPUS        : 1
 CUDA_VISIBLE_DEVICES : 0,1,2
 

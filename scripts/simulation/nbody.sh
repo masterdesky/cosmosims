@@ -4,7 +4,7 @@
 #
 #   nbody.sh
 #
-#   Handles the N-body simulations using GADGET4 or AREPO.
+#   Handles the N-body simulations.
 #
 # 
 # ==============================================================================

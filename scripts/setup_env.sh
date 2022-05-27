@@ -20,11 +20,11 @@ export FFTW3_INSTALL=/home/masterdesky/opt/fftw-3.3.10
 export HWLOC_INSTALL=/home/masterdesky/opt/hwloc-2.6.0
 export LAT2_INSTALL=/home/masterdesky/opt/LATfield2
 export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.10.6
-export SPLASH_DIR=
-export GIZA_INSTALL=
+export SPLASH_DIR=/home/masterdesky/apps/SPLASH
+export GIZA_INSTALL=/home/masterdesky/apps/SPLASH/giza
 
 # Adding binaries to `PATH` variable
-for BIN_PATH in OMPI_INSTALL, SPLASH_DIR; do
+for BIN_PATH in OMPI_INSTALL SPLASH_DIR; do
   if [[ -z ${!BIN_PATH} ]]; then
     continue
   fi

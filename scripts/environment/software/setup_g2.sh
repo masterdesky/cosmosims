@@ -1,34 +1,40 @@
 #!/bin/bash
 
-# Downloading GADGET2
-if [[ ${DLOAD_G2} = true ]]; then
-  if [[ ! -d ${BUILDDIR}/GADGET2 ]]; then
+
+if [[ ${INSTALL_G2} = true ]];
+then
+  # Downloading GADGET2
+  G2_BUILD=${BUILDDIR}/GADGET2
+  if [[ ! -d ${G2_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading GADGET2..."
     echo
 
     mkdir -p ${BUILDDIR}
 
+    # If previous download exists, delete it first (relevant in case of forced install)
+    if [[ -d ${G2_BUILD} ]]; then
+      rm -rf ${G2_BUILD}
+    fi
+
+    # Download GADGET2
     wget "https://wwwmpa.mpa-garching.mpg.de/gadget/gadget-2.0.7.tar.gz" -P ${BUILDDIR}
     tar -xzvf ${BUILDDIR}/gadget-2.0.7.tar.gz -C ${BUILDDIR}
     rm -f ${BUILDDIR}/gadget-2.0.7.tar.gz
-    mv ${BUILDDIR}/Gadget-2.0.7 ${BUILDDIR}/GADGET2
+    mv ${BUILDDIR}/Gadget-2.0.7 ${G2_BUILD}
   fi
-fi
 
 
-if [[ ${INSTALL_G2} = true ]];
-then
+  # Installing GADGET2
   echo
   echo "Installing GADGET2..."
   echo
 
-  # (Re)installing GADGET2
-  cd ${BUILDDIR}/GADGET2/Gadget2
-  if [[ -f ${BUILDDIR}/GADGET2/Gadget2/m.log ]]; then
-      make clean |& tee >(ts "[%x %X]" > ${BUILDDIR}/GADGET2/Gadget2/cl.log)
+  cd ${G2_BUILD}/Gadget2
+  if [[ -f ${G2_BUILD}/Gadget2/m.log ]]; then
+      make clean |& tee >(ts "[%x %X]" > ${G2_BUILD}/Gadget2/cl.log)
   fi
-  MAKEFILE=${BUILDDIR}/GADGET2/Gadget2/Makefile
+  MAKEFILE=${G2_BUILD}/Gadget2/Makefile
 
   #  1. Makefile setup
   ## a) Path variables
@@ -56,17 +62,17 @@ then
   fi
   ## d) Select between built-in glass generation or reading IC file
   sed -i '/-DREAD_IC/ { s|^#|| }' ${MAKEFILE}
-  if [[ ${FORCE_G2} = true ]]; then
+  if [[ ${G2} = true ]]; then
     sed -i '/-DREAD_IC/ { s|^|#| }' ${MAKEFILE}
   fi
 
   #  2. Source code changes to implement IC reading before glass generation
   OLD_STR='#if \(MAKEGLASS > 1\)\n      seed_glass\(\);'
   NEW_STR='#if \(MAKEGLASS > 1\)\n#ifdef READ_IC\n      read_ic\(All.InitCondFile\);\n#else\n      seed_glass\(\);\n#endif'
-  perl -i -p0e 's/'"${OLD_STR}"'/'"${NEW_STR}"'/igs' ${BUILDDIR}/GADGET2/Gadget2/init.c
+  perl -i -p0e 's/'"${OLD_STR}"'/'"${NEW_STR}"'/igs' ${G2_BUILD}/Gadget2/init.c
 
   # Build GADGET2
-  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${BUILDDIR}/GADGET2/Gadget2/m.log)
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${G2_BUILD}/Gadget2/m.log)
 
   cd ${BUILDDIR}
 fi

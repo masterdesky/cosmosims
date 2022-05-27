@@ -1,8 +1,8 @@
 # Parameters to specify
-
 BUILDDIR    : ${HOME}/apps
 INSTALLDIR  : ${HOME}/opt
 BUILDSYS    : ${ENVDIR}/build
+LOGDIR      : ${SCRIPTDIR}/logs
 
 # CONDAROOT
 # Path to the `conda` rootdir on the machine. Leave empty to search for conda

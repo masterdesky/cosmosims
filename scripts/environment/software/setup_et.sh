@@ -51,9 +51,10 @@ then
       ${BUILDDIR}/${THORNPATH}/einsteintoolkit.th
 
   ## Setup conda env for ET + FLRWSolver
-  if ! { conda env list | grep 'et-flrw'; } >/dev/null 2>&1; then
-    conda create --name et-flrw python=3.8 python-configuration cffi numpy scipy h5py -y
+  if { conda env list | grep 'et-flrw'; } >/dev/null 2>&1; then
+    conda remove --name et-flrw --all -y
   fi
+  conda create --name et-flrw python=3.8 cffi numpy scipy -y
 
   ## Setup Python 3.x linking for the FLRWSolver codes
   ### `conda.sh` should be sourced first if `conda` is ran from a bash script
@@ -97,13 +98,14 @@ then
   sed -i '/^num-threads/ { s|=.*|= '"${N_CPUS}"'| }' ${MCONFIG}
 
   ## Build Cactus + FLRWSolver
-  ${ET_BUILD}/Cactus/simfactory/bin/sim build \
+  HDF5_DIR=${HDF5_INSTALL}
+  ${ET_BUILD}/Cactus/simfactory/bin/sim build -j${N_CPUS} \
           --thornlist=thornlists/einsteintoolkit.th \
           --optionlist=generic.cfg \
-          --cores=${N_CPUS} \
           --clean \
   |& tee >(ts "[%x %X]" > ${ET_BUILD}/m.log)
   
   conda deactivate
+  conda remove --name et-flrw --all -y
   cd ${BUILDDIR}
 fi

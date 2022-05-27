@@ -30,6 +30,7 @@ usage() {
   echo "  --i2lptop : Install 2LPTic with opposite phase to ${BUILDDIR}/2LPT-IC-OP."
   echo "  --ig2     : Install GADGET2 to ${BUILDDIR}/GADGET2."
   echo "  --ig4     : Install GADGET4 to ${BUILDDIR}/GADGET4."
+  echo "  --igizmo  : Install GIZMO to ${BUILDDIR}/GIZMO."
   echo "  --iarepo  : Install Arepo to ${BUILDDIR}/Arepo."
   echo "  --isteps  : Install StePS to ${BUILDDIR}/StePS."
   echo "  --igevol  : Install gevolution to ${BUILDDIR}/gevolution."
@@ -38,7 +39,7 @@ usage() {
   echo "  --igv     : Install GADGETViewer ${GV_VER} to ${BUILDDIR}/GADGETViewer-${GV_VER}."
   echo "  --igenpk  : Install GenPK to ${BUILDDIR}/GenPK."
   echo "  --isp     : Install SPLASH to ${BUILDDIR}/SPLASH"
-  echo "  --force   : Force the download of the software selected for install."
+  echo "  --force   : Force downloading all software selected for install."
   echo "  --help    : Displays this message."
   echo 
 }
@@ -60,7 +61,7 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 source ${SCRIPTDIR}/setup_env.sh
 
 
-FLAGS="i2lpt,i2lptop,ig2,ig4,iarepo,isteps,igevol,icgr,iet,igv,igenpk,isp,force,help"
+FLAGS="i2lpt,i2lptop,ig2,ig4,igizmo,iarepo,isteps,igevol,icgr,iet,igv,igenpk,isp,force,help"
 # Call getopt to validate the provided input 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
@@ -92,6 +93,9 @@ while true; do
       ;;
   --icgr)
       export INSTALL_CGRAPH=true
+      ;;
+  --igizmo)
+      export INSTALL_GIZMO=true
       ;;
   --iarepo)
       export INSTALL_AREPO=true
