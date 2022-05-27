@@ -20,17 +20,26 @@ export FFTW3_INSTALL=/home/masterdesky/opt/fftw-3.3.10
 export HWLOC_INSTALL=/home/masterdesky/opt/hwloc-2.6.0
 export LAT2_INSTALL=/home/masterdesky/opt/LATfield2
 export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.10.6
-
+export SPLASH_DIR=
+export GIZA_INSTALL=
 
 # Adding binaries to `PATH` variable
-if [[ ":${PATH}:" != *":${OMPI_INSTALL}/bin:"* ]]; then
-	export PATH="${OMPI_INSTALL}/bin:${PATH}"
-fi
-
+for BIN_PATH in OMPI_INSTALL, SPLASH_DIR; do
+  if [[ -z ${!BIN_PATH} ]]; then
+    continue
+  fi
+  if [[ ":${PATH}:" != *":${!BIN_PATH}/bin:"* ]]; then
+    export PATH="${!BIN_PATH}/bin:${PATH}"
+  fi
+done
 
 # Adding libraries to the `LD_LIBRARY_PATH` variable
 for LIB_PATH in OMPI_INSTALL GSL1_INSTALL GSL2_INSTALL \
-                FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL; do
+                FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL \
+                GIZA_INSTALL; do
+  if [[ -z ${!LIB_PATH} ]]; then
+    continue
+  fi
 	if [[ ":${LD_LIBRARY_PATH}:" != *":${!LIB_PATH}/lib:"* ]]; then
 		export LD_LIBRARY_PATH="${!LIB_PATH}/lib:${LD_LIBRARY_PATH}"
 	fi

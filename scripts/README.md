@@ -10,7 +10,7 @@ This can be setup via
     ```bash
     sudo apt install build-essential gfortran
     ```
-- I various circumstances C headers may be installed separately via
+    while in various circumstances C headers may be installed separately, but by default it's not needed. They can be installed via
     ```bash
     sudo apt install libc-dev
     ```

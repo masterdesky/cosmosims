@@ -3,6 +3,8 @@
 
 if [[ ${INSTALL_SP} = true ]]; then
   SP_BUILD=${BUILDDIR}/SPLASH
+  sed -i '/^export SPLASH/ { s|=.*|='"${SP_BUILD}"'| }' ${SCRIPTDIR}/setup_env.sh
+  sed -i '/^export GIZA/ { s|=.*|='"${SP_BUILD}"'/giza| }' ${SCRIPTDIR}/setup_env.sh
   # Downloading SPLASH
   if [[ ! -d ${SP_BUILD} || ${FORCE} = true ]]; then
     echo
@@ -36,7 +38,7 @@ if [[ ${INSTALL_SP} = true ]]; then
     make clean |& tee >(ts "[%x %X]" > ${SP_BUILD}/cl.log)
   fi
   # Install SPLASH
-  make SYSTEM=gfortran HDF5=yes withgiza \
+  make SYSTEM=gfortran HDF5=yes HDF5ROOT=${HDF5_INSTALL} withgiza \
   |& tee >(ts "[%x %X]" > ${SP_BUILD}/m.log)
 
   cd ${BUILDDIR}
