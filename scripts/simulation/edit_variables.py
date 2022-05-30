@@ -18,7 +18,7 @@ def replace_a_line(original_line, new_line, file):
       else:
         print(line, end ='')
 
-def edit_variables(H0, LBOX, LBOX_PER, path):
+def edit_variables(H0, RES, LBOX, LBOX_PER, path):
   """
   Calculates cosmological units, which are needed for the whole simulation
   pipeline. Needed variables are the following:
@@ -30,8 +30,8 @@ def edit_variables(H0, LBOX, LBOX_PER, path):
   The "V_unit" is exclusively used by GADGET to ensure that the Hubble parameter
   equals to exactly `H_0 = 100` in GADGET's internal units.
   """
-    # The V_unit value is only compatible with
-    # GADGET but not with StePS
+  # The V_unit value is only compatible with
+  # GADGET but not with StePS
     
   h = H0 / 100                    # Hubble parameter
   G = 1.0*cds.G                   # G in SI
@@ -60,6 +60,10 @@ def edit_variables(H0, LBOX, LBOX_PER, path):
   replace_a_line(line_change.format('h'),
                  line_target.format('h', h),
                  file=os.path.join(path, parfile))
+  # Calculate `NPART`, the number of particles
+  replace_a_line(line_change.format('NPART'),
+                 line_target.format('NPART', RES**3),
+                 file=os.path.join(path, parfile))
   # Add `LBOX_H` ([LBOX / h] = [Mpc])
   replace_a_line(line_change.format('LBOX_H'),
                  line_target.format('LBOX_H', LBOX/h),
@@ -85,8 +89,9 @@ def edit_variables(H0, LBOX, LBOX_PER, path):
 if __name__ == '__main__':
 
   H0 = float(sys.argv[1])         # 
-  LBOX = float(sys.argv[2])       # Boxsize of the simulation in [Mpc/h]
-  LBOX_PER = float(sys.argv[3])   # Boxsize of the multiplied simulation in [Mpc/h]
-  path = sys.argv[4]              # 
+  RES = int(sys.argv[2])          # Resolution of the simulation box
+  LBOX = float(sys.argv[3])       # Boxsize of the simulation in [Mpc/h]
+  LBOX_PER = float(sys.argv[4])   # Boxsize of the multiplied simulation in [Mpc/h]
+  path = sys.argv[5]              # 
 
-  edit_variables(H0, LBOX, LBOX_PER, path)
+  edit_variables(H0, RES, LBOX, LBOX_PER, path)
