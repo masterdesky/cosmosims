@@ -15,3 +15,4 @@ COMPUTER    : home
 # Number of CPUs and GPUs (if available) used for various tasks
 N_CPUS      : 8
 N_GPUS      : 1
+CUDA_VISIBLE_DEVICES : 0,1,2
