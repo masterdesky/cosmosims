@@ -112,7 +112,7 @@ if [[ ${CALC_MISSING} = true ]]; then
   ## Activate environment containing astropy and the basic packages
   conda activate cosmo
   ## Calculate missing variables and write them into the `parameters-*.sh` file
-  ${SIMDIR}/edit_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
+  ${SIMDIR}/edit_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
   ## Export newly calculated variables
   for PAR in ${SIMDIR}/*-temp.sh; do
     source ${PAR}

@@ -11,10 +11,10 @@
 
 
 # Check if parameters are correctly set
-##  1. NPART : - Number of simulated particles in N-body simulations
-##             - Number of simulated HD volumes in HD simulations 
-if [[ ${NPART} < 1 ]]; then
-  echo "[ERROR] NPART should be an integer greater than 1!" \
+##  1. RES : - Number of simulated particles in N-body simulations per dimension
+##           - Number of simulated HD volumes in HD simulations per dimension
+if [[ ${RES} < 1 ]]; then
+  echo "[ERROR] RES should be an integer greater than 0!" \
   | ts "[%x %X]"
   clean_up
   exit 2
@@ -50,10 +50,10 @@ fi
 
 # Template name for all output files of the simulations
 ## Common ending for non-periodic volumes (eg. glass ICs and glasses)
-export SUFFIX=N${NPART}_L${LBOX}_M${MBINS}_min${PARTMIN}
+export SUFFIX=R${RES}_L${LBOX}_M${MBINS}_min${PARTMIN}
 ## Common ending for directories containing non-periodic volumes
-export SUFFIX_DIR=N${NPART}_L${LBOX}_M${MBINS}
+export SUFFIX_DIR=R${RES}_L${LBOX}_M${MBINS}
 ## Common ending for periodic volumes (eg. perturbed glasses and N-body sim.)
-export SUFFIX_PER=N${NPART}_L${LBOX_PER}_M${MBINS}_min${PARTMIN}
+export SUFFIX_PER=R${RES}_L${LBOX_PER}_M${MBINS}_min${PARTMIN}
 ## Common ending for directories containing periodic volumes
-export SUFFIX_PER_DIR=N${NPART}_L${LBOX_PER}_M${MBINS}
+export SUFFIX_PER_DIR=R${RES}_L${LBOX_PER}_M${MBINS}
