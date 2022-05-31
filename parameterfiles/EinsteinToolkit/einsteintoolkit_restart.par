@@ -17,29 +17,27 @@ ActiveThorns = "HydroBase Tmunubase GRHydro EOS_Omni"
 ActiveThorns = "FLRWSolver InitBase"
 ActiveThorns = "CarpetIOASCII CarpetIOScalar CarpetIOHDF5 CarpetIOBasic"
 
-# Say that we want to recover ...
-# You can also try "auto" and omit the ".it_0" field in the recover_file.
-#IO::recover       = "manual"
-IO::recover  = "auto"
 
-# Recover from a ID checkpoint file with basename:
+# Possible parameters are `manual`, `auto` or `auprobe`
+IO::recover  = "autoprobe"
+
+# Checkpoint files location
+IO::recover_dir   = 
+# Basename of checkpoint files (it's `checkpoint.chkpt` by default)
 IO::recover_file  = 
-
-# checkpoint files to be found in directory:
-IOUtil::recover_dir = 
 
 # Note that this parameter is restored to "yes" during parameter recovery.
 # Since we don't need to checkpoint twice it is explicitely disabled here.
 IO::checkpoint_ID = "yes"
 
-# disable output of file information (parameter filename, creation date)
+# Disable output of file information (parameter filename, creation date)
 # because this could cause diffs when running the testsuite
 IO::out_fileinfo  = "none"
 
-# do not use the new scheme for names of output files
+# Do not use the new scheme for names of output files
 IO::new_filename_scheme   = "no"
 
-# final time for z~0
+# Final time for z~0
 Cactus::cctk_final_time   = 
 
 IOScalar::outScalar_vars  = "
@@ -48,10 +46,12 @@ IOScalar::outScalar_vars  = "
  ADMBase::alp
  ADMBase::metric
  ADMBase::curv
+ ML_ADMConstraints::ML_Ham
+ ML_ADMConstraints::ML_mom
 "
 
-# and maybe change the frequency of 3D output for low z
-IOHDF5::out3d_every     = 20
+# Change the frequency of outputs at low z values (iterations per output)
+IOHDF5::out3d_every = 
 IOHDF5::out3D_vars	= "
  HydroBase::vel
  HydroBase::rho

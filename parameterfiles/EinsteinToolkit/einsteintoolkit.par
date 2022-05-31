@@ -225,7 +225,7 @@ IOScalar::outScalar_vars  = "
  ML_ADMConstraints::ML_mom
 "
 
-IOHDF5::out3d_every	= 200
+IOHDF5::out3d_every	= 
 IOHDF5::out3d_vars 	= "
   HydroBase::rho
   HydroBase::vel
@@ -239,6 +239,9 @@ IO::out_unchunked = "yes"
 
 IOHDF5::checkpoint                  = yes
 IO::checkpoint_dir                  = $parfile
-IO::checkpoint_ID                   = yes
 IO::checkpoint_every_walltime_hours = 1.0
 IO::checkpoint_on_terminate         = yes
+
+# Note that this parameter is restored to "yes" during parameter recovery.
+# Since we don't need to checkpoint twice it is explicitely disabled here.
+IO::checkpoint_ID                   = no

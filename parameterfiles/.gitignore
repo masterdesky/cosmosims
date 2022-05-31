@@ -16,5 +16,5 @@ gevolution/*
 !gevolution/gevolution.param
 ## EinsteinToolkit
 EinsteinToolkit/*
-!EinsteinToolkit/einsteintoolkit.param
-!EinsteinToolkit/einsteintoolkit_restart.param
+!EinsteinToolkit/einsteintoolkit.par
+!EinsteinToolkit/einsteintoolkit_restart.par
