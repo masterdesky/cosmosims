@@ -8,6 +8,7 @@ import astropy.units as u
 from astropy.units import cds
 cds.enable()
 
+
 def replace_a_line(original_line, new_line, file):
   print('new line: \" {0} \"'.format(new_line))
 

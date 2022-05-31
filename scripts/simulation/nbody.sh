@@ -10,17 +10,16 @@
 # ==============================================================================
 
 # THE `SIMDIR` directory will be defined as the directory that contains all
-# the simulation scripts (`glass.sh`, `nbody.sh` and `full.sh`) and all related
-# files and directories
+# the simulation scripts (`glass.sh` and `nbody.sh`) and all related files
+# and directories
 export SIMDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # The `SCRIPTDIR` directory will be defined as the directory that contains all
 # the scripts and folders that are used during the configuration and simulation
 # pipelines
 export SCRIPTDIR="$( dirname "${SIMDIR}" )"
-# The `PIPELINEDIR` directory will be defined as the directory that contains all
-# files and folders used during the configuration and simulation pipelines. This
-# includes the `scripts`, `logs` and `data` directories.
-export PIPELINEDIR="$( dirname "${SCRIPTDIR}" )"
+# The `ROOTDIR` directory will be defined as the directory that contains all
+# files and folders of the `cosmosims` repository
+export ROOTDIR="$( dirname "${SCRIPTDIR}" )"
 
 
 usage() {
@@ -62,7 +61,7 @@ FLAGS="calc-missing,g2,g4,gevol,cgr,et,arepo,help"
 # Call getopt to validate the provided input. 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
-    echo "Incorrect options provided" \
+    echo "[NBODY] Incorrect options provided" \
     | ts "[%x %X]"
     usage;
     exit 1
@@ -112,7 +111,7 @@ if [[ ${CALC_MISSING} = true ]]; then
   ## Activate environment containing astropy and the basic packages
   conda activate cosmo
   ## Calculate missing variables and write them into the `parameters-*.sh` file
-  ${SIMDIR}/edit_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
+  ${SIMDIR}/calc_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
   ## Export newly calculated variables
   for PAR in ${SIMDIR}/*-temp.sh; do
     source ${PAR}

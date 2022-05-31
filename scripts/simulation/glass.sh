@@ -10,29 +10,16 @@
 # ==============================================================================
 
 # THE `SIMDIR` directory will be defined as the directory that contains all
-# the simulation scripts (`glass.sh`, `nbody.sh` and `full.sh`) and all related
-# files and directories
+# the simulation scripts (`glass.sh` and `nbody.sh`) and all related files
+# and directories
 export SIMDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 # The `SCRIPTDIR` directory will be defined as the directory that contains all
 # the scripts and folders that are used during the configuration and simulation
 # pipelines
 export SCRIPTDIR="$( dirname "${SIMDIR}" )"
-# The `PIPELINEDIR` directory will be defined as the directory that contains all
-# files and folders used during the configuration and simulation pipelines. This
-# includes the `scripts`, `logs` and `data` directories.
-export PIPELINEDIR="$( dirname "${SCRIPTDIR}" )"
-
-# Parse input parameters
-source ${SCRIPTDIR}/environment/parse_yaml.sh ${SIMDIR} "parameters"
-# Parse data directory location
-source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR} "datadir"
-
-# Setup bash environment for further commands
-# Normally this should be set up previously by installing the basic apps
-source ${SCRIPTDIR}/environment/setup_env.sh
-
-# Set environmental variables for the simulations
-source ${SIMDIR}/setup_sim.sh
+# The `ROOTDIR` directory will be defined as the directory that contains all
+# files and folders of the `cosmosims` repository
+export ROOTDIR="$( dirname "${SCRIPTDIR}" )"
 
 
 usage() {
@@ -53,9 +40,21 @@ usage() {
 
 clean_up() {
   # Delete created `*-temp.sh` files at the end of the script
-  rm ${SCRIPTDIR}/*-temp.sh
+  rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${SIMDIR}/*-temp.sh
 }
+
+
+# Parse input parameters
+source ${SCRIPTDIR}/parse_yaml.sh ${SIMDIR} "parameters"
+# Parse machine parameters
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "machine"
+# Parse data directory location
+source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
+
+# Setup bash environment for further commands
+# Normally this should be set up previously by installing the basic apps
+source ${SCRIPTDIR}/setup_env.sh
 
 
 FLAGS="calc-missing,glass-ic,glass-sim,force-g2,force-steps,perturbate,ophase,help"
@@ -112,7 +111,7 @@ if [[ ${CALC_MISSING} = true ]]; then
   ## Activate environment containing astropy and the basic packages
   conda activate cosmo
   ## Calculate missing variables and write them into the `parameters-*.sh` file
-  ${SIMDIR}/edit_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
+  ${SIMDIR}/calc_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
   ## Export newly calculated variables
   for PAR in ${SIMDIR}/*-temp.sh; do
     source ${PAR}
@@ -125,14 +124,14 @@ fi
 if [[ ${FORCE_STEPS} = true ]]; then
   if [[ ${GLASS_SIM} = true ]]; then
     echo
-    echo "[GLASS GEN] StePS simulation with ${MBINS} mass bin." \
+    echo "[GLASS GEN] StePS simulation with ${MBINS} mass bins." \
     | ts "[%x %X]"
   fi
   source ${SIMDIR}/glass_linear/glass_StePS.sh
 else
   if [[ ${GLASS_SIM} = true ]]; then
     echo
-    echo "[GLASS GEN] GADGET2 simulation with ${MBINS} mass bin." \
+    echo "[GLASS GEN] GADGET2 simulation with ${MBINS} mass bins." \
     | ts "[%x %X]"
   fi
   source ${SIMDIR}/glass_linear/glass_gadget2.sh
