@@ -32,7 +32,7 @@ def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
     ainit = 1.0
     # Simulation (code units) box size, dtfac, res, etc
     boxL  = 1.0
-    dtfac = 0.1
+    dtfac = 0.05
     dx    = boxL / RES
     dt    = dtfac * dx
     # Redshift after which you'd like to increase freq of 3D output
@@ -129,10 +129,11 @@ def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
         'FLRWSolver::FLRW_boxlength'   : Lz0mpc.value,
     }
     replace_str = {
-        'IO::recover_file' : f"checkpoint.chkpt", #it_{int(itz1)+1}",
+        'IO::recover_file' : f"\"checkpoint.chkpt\"", #.it_{int(itz1)+1}",
         'Cactus::cctk_final_time' : etafinal
     }
     
+    # Change normal parameterfile
     file = ""
     with open(ETPAR, 'r') as f:
         for line in f:
@@ -143,6 +144,7 @@ def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
     with open(ETPAR, 'w+') as f:
         f.write(file)
     
+    # Change restart parameterfile
     file = ""
     with open(ETRESPAR, 'r') as f:
         for line in f:
