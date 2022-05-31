@@ -96,7 +96,7 @@ if [[ ${GLASS_SIM} = true ]] && [[ ${FORCE_STEPS} != true ]]; then
   cd ${GLASS_DIR}
   mpirun -np ${N_CPUS} --use-hwthread-cpus \
          ${BUILDDIR}/GADGET2/Gadget2/Gadget2 ${CURRENT_PARAM_FILE} \
-         |& tee >(ts "[%x %X]" > ${LOGDIR}/GADGET2/${PREFIX}.log)
+  |& tee >(ts "[%x %X]" > ${LOGDIR}/GADGET2/${PREFIX}.log)
 
   if [[ ! -f ${GLASS}_000 ]]; then
     echo "[GLASS GEN] Glass generation failed! No output was generated!" \

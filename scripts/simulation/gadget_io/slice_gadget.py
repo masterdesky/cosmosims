@@ -5,7 +5,7 @@
 #   slice_gadget.py
 #
 #   Slicing up a file in Gadget Legacy 1 format to multiple smaller files,
-#   however identical in its size.
+#   however identical in their size.
 #
 #
 # ==============================================================================
