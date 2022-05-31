@@ -1,33 +1,40 @@
 #!/bin/bash
 
-# Downloading GADGET4
-if [[ ${DLOAD_G4} = true ]]; then
-  if [[ ! -d ${BUILDDIR}/GADGET4 ]]; then
+
+if [[ ${INSTALL_G4} = true ]];
+then
+  G4_BUILD=${BUILDDIR}/GADGET4
+  # Downloading GADGET4
+  if [[ ! -d ${G4_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading GADGET4..."
     echo
 
     mkdir -p ${BUILDDIR}
 
-    git clone http://gitlab.mpcdf.mpg.de/vrs/gadget4 ${BUILDDIR}/GADGET4
+    # If previous download exists, delete it first (relevant in case of forced install)
+    if [[ -d ${G4_BUILD} ]]; then
+      rm -rf ${G4_BUILD}
+    fi
+
+    git clone http://gitlab.mpcdf.mpg.de/vrs/gadget4 ${G4_BUILD}
   fi
-fi
 
 
-if [[ ${INSTALL_G4} = true ]];
-then
+  # Installing GADGET4
   echo
   echo "Installing GADGET4..."
   echo
 
-  # (Re)installing GADGET4
-  cd ${BUILDDIR}/GADGET4
-  if [[ -f ${BUILDDIR}/GADGET4/m.log ]]; then
-      make clean |& tee >(ts "[%x %X]" > ${BUILDDIR}/GADGET4/cl.log)
+  cd ${G4_BUILD}
+  # Uninstall previous version
+  if [[ -f ${G4_BUILD}/m.log ]]; then
+      make clean |& tee >(ts "[%x %X]" > ${G4_BUILD}/cl.log)
   fi
-  MAKEFILE=${BUILDDIR}/GADGET4/buildsystem/Makefile.path.${COMPUTER}
 
-  ## Prepare buildsystem/Makefile.path.${COMPUTER}
+  #  Makefile and `Config.sh` setup
+  ## a) Prepare buildsystem/Makefile.path.${COMPUTER}
+  MAKEFILE=${G4_BUILD}/buildsystem/Makefile.path.${COMPUTER}
   cp ${BUILDSYS}/GADGET4/buildsystem/Makefile.path ${MAKEFILE}
   sed -i '/^GSL_INCL/ { s|$| -I'"${GSL2_INSTALL}"'/include|g }' ${MAKEFILE}
   sed -i '/^GSL_LIBS/ { s|$| -L'"${GSL2_INSTALL}"'/lib|g }' ${MAKEFILE}
@@ -37,22 +44,22 @@ then
   sed -i '/^HDF5_LIBS/ { s|$| -L'"${HDF5_INSTALL}"'/lib -lhdf5 -lz|g }' ${MAKEFILE}
   sed -i '/^HWLOC_INCL/ { s|$| -I'"${HWLOC_INSTALL}"'/include|g }' ${MAKEFILE}
   sed -i '/^HWLOC_LIBS/ { s|$| -L'"${HWLOC_INSTALL}"'/lib|g }' ${MAKEFILE}
-  ## Prepare Makefile.systype
-  cp ${BUILDSYS}/GADGET4/Makefile.systype ${BUILDDIR}/GADGET4/Makefile.systype
-  sed -i '/^SYSTYPE/ { s|${COMPUTER}|'"${COMPUTER}"'| }' ${BUILDDIR}/GADGET4/Makefile.systype
-  ## Prepare Makefile
-  cp ${BUILDSYS}/GADGET4/Makefile ${BUILDDIR}/GADGET4/Makefile
-  sed -i 's|${COMPUTER}|'"${COMPUTER}"'|g' ${BUILDDIR}/GADGET4/Makefile
-  ## Copy Config.sh file
-  cp ${BUILDSYS}/GADGET4/Config.sh ${BUILDDIR}/GADGET4/Config.sh
-  ## Prepare simulation parameters
+  ## b) Prepare Makefile.systype
+  cp ${BUILDSYS}/GADGET4/Makefile.systype ${G4_BUILD}/Makefile.systype
+  sed -i '/^SYSTYPE/ { s|${COMPUTER}|'"${COMPUTER}"'| }' ${G4_BUILD}/Makefile.systype
+  ## c) Prepare Makefile
+  cp ${BUILDSYS}/GADGET4/Makefile ${G4_BUILD}/Makefile
+  sed -i 's|${COMPUTER}|'"${COMPUTER}"'|g' ${G4_BUILD}/Makefile
+  ## d) Copy Config.sh file
+  cp ${BUILDSYS}/GADGET4/Config.sh ${G4_BUILD}/Config.sh
+  ## e) Prepare simulation parameters
   if [[ ! -z ${NMESH} ]]; then
-    sed -i '/^PMGRID= *#/ { s|PMGRID= |PMGRID='"${NMESH}"' |g }' ${BUILDDIR}/GADGET4/Config.sh
+    sed -i '/^PMGRID= *#/ { s|PMGRID= |PMGRID='"${NMESH}"' |g }' ${G4_BUILD}/Config.sh
   fi
   
   # Build GADGET4
-  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${BUILDDIR}/GADGET4/m.log)
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${G4_BUILD}/m.log)
 
-  mkdir -p ${BUILDDIR}/GADGET4/Simulations
+  mkdir -p ${G4_BUILD}/Simulations
   cd ${BUILDDIR}
 fi

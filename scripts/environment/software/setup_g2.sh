@@ -3,8 +3,8 @@
 
 if [[ ${INSTALL_G2} = true ]];
 then
-  # Downloading GADGET2
   G2_BUILD=${BUILDDIR}/GADGET2
+  # Downloading GADGET2
   if [[ ! -d ${G2_BUILD} || ${FORCE} = true ]]; then
     echo
     echo "Downloading GADGET2..."
@@ -31,13 +31,14 @@ then
   echo
 
   cd ${G2_BUILD}/Gadget2
+  # Uninstall previous version
   if [[ -f ${G2_BUILD}/Gadget2/m.log ]]; then
       make clean |& tee >(ts "[%x %X]" > ${G2_BUILD}/Gadget2/cl.log)
   fi
-  MAKEFILE=${G2_BUILD}/Gadget2/Makefile
 
   #  1. Makefile setup
-  ## a) Path variables
+  ## a) Path to dependencies
+  MAKEFILE=${G2_BUILD}/Gadget2/Makefile
   cp ${BUILDSYS}/GADGET2/Makefile ${MAKEFILE}
   sed -i '/^GSL_INCL/ { s|$| -I'"${GSL1_INSTALL}"'/include| }' ${MAKEFILE}
   sed -i '/^GSL_LIBS/ { s|$| -L'"${GSL1_INSTALL}"'/lib| }' ${MAKEFILE}
