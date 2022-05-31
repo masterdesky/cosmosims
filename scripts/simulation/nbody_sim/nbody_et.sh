@@ -34,7 +34,7 @@ mkdir -p ${OUTDIR}
 ## Get rootdir of the FLRWSolver thorn
 FLRWSOLVERPATH=${BUILDDIR}/EinsteinToolkit/Cactus/repos/flrwsolver
 ## Get rootdir of EinsteinToolkit parameterfiles
-ETPARFILEDIR=${PIPELINEDIR}/parameterfiles/EinsteinToolkit
+ETPARFILEDIR=${ROOTDIR}/parameterfiles/EinsteinToolkit
 ## Create directory and template for parameterfiles used in the simulation
 mkdir -p ${ETPARFILEDIR}/${PROGRAMNAME}
 PARNAME=einsteintoolkit
@@ -99,7 +99,6 @@ cd ${OUTDIR}/output-0001/${PARNAME}
 python3 ${FLRWSOLVERPATH}/tools/split_HDF5_per_iteration3.py
 ## Conda environment isn't needed anymore
 conda deactivate
-conda remove --name et-flrw --all -y
 
 
 # 8. Visualize with splash

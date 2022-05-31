@@ -6,7 +6,7 @@ IC          : /home/masterdesky/data/2LPT-IC/ICs/IC_N262144_L1000_M1/IC_N262144_
 
 
 # PARAMETERS FOR GLASS IC GENERATION
-RES           : 16
+RES           : 64
 NPART         : TO_BE_CALC
 LBOX          : 500
 LBOX_H        : TO_BE_CALC
