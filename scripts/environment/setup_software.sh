@@ -38,7 +38,8 @@ usage() {
   echo "  --iet     : Install EinteinToolkit with FLRWSolver to ${BUILDDIR}/EinsteinToolkit."
   echo "  --igv     : Install GADGETViewer ${GV_VER} to ${BUILDDIR}/GADGETViewer-${GV_VER}."
   echo "  --igenpk  : Install GenPK to ${BUILDDIR}/GenPK."
-  echo "  --isp     : Install SPLASH to ${BUILDDIR}/SPLASH"
+  echo "  --ipyl3   : Install Pylians3 to ${BUILDDIR}/Pylians3."
+  echo "  --isp     : Install SPLASH to ${BUILDDIR}/SPLASH."
   echo "  --force   : Force downloading all software selected for install."
   echo "  --help    : Displays this message."
   echo 
@@ -63,7 +64,7 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 source ${SCRIPTDIR}/setup_env.sh
 
 
-FLAGS="i2lpt,i2lptop,ig2,ig4,igizmo,iarepo,isteps,igevol,icgr,iet,igv,igenpk,isp,force,help"
+FLAGS="i2lpt,i2lptop,ig2,ig4,igizmo,iarepo,isteps,igevol,icgr,iet,igv,igenpk,ipyl3,isp,force,help"
 # Call getopt to validate the provided input 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
@@ -110,6 +111,9 @@ while true; do
       ;;
   --igenpk)
       export INSTALL_GENPK=true
+      ;;
+	--ipyl3)
+      export INSTALL_PYL3=true
       ;;
   --isp)
       export INSTALL_SP=true

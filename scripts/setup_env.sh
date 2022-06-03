@@ -22,6 +22,7 @@ export LAT2_INSTALL=/home/masterdesky/opt/LATfield2
 export HDF5_INSTALL=/home/masterdesky/opt/hdf5-1.10.6
 export SPLASH_DIR=/home/masterdesky/apps/SPLASH
 export GIZA_INSTALL=/home/masterdesky/apps/SPLASH/giza
+export PYL3_INSTALL=/home/masterdesky/apps/Pylians3/library/build/lib.linux-x86_64-cpython-310
 
 # Adding binaries to `PATH` variable
 for BIN_PATH in OMPI_INSTALL SPLASH_DIR; do
@@ -30,6 +31,16 @@ for BIN_PATH in OMPI_INSTALL SPLASH_DIR; do
   fi
   if [[ ":${PATH}:" != *":${!BIN_PATH}/bin:"* ]]; then
     export PATH="${!BIN_PATH}/bin:${PATH}"
+  fi
+done
+
+# Adding libraries to `PYTHONPATH` variable
+for LIB_PATH in PYL3_INSTALL; do
+  if [[ -z ${!LIB_PATH} ]]; then
+    continue
+  fi
+  if [[ ":${PYTHONPATH}:" != *":${!LIB_PATH}/bin:"* ]]; then
+    export PYTHONPATH="${!LIB_PATH}:${PYTHONPATH}"
   fi
 done
 
