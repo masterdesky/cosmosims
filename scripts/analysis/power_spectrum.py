@@ -27,12 +27,6 @@ def main() -> None:
     delta = np.array(FILE[keylist[13]], dtype=np.float32)
     FILE.close()
 
-    ############# plot density field #############
-    fig = plt.figure(figsize=(8, 8))
-    plt.axis('off')
-    plt.imshow(delta[:, :, RES_T//2], interpolation='bicubic')
-    plt.show()
-
     ############# calculate power spectrum #############
     Pk = PKL.Pk(delta,
                 BoxSize=LBOX_PER,

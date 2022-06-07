@@ -63,7 +63,7 @@ then
   ### Get compile parameters
   PCFLAGS="$(python3-config --cflags --embed)"
   PLDFLAGS="$(python3-config --ldflags --embed) -lgfortran"
-  LIBFLAGS="$(python3-config --libs --embed) -lgfortran"
+  PLIBS="$(python3-config --libs --embed) -lgfortran"
   ### Write these compile parameters to the appropriate files
   CFLAGSPATH=EinsteinToolkit/Cactus/repos/flrwsolver/src/make.code.deps
   LDFLAGSPATH=EinsteinToolkit/Cactus/simfactory/mdb/optionlists/generic.cfg
@@ -71,7 +71,7 @@ then
   cp ${BUILDSYS}/${LDFLAGSPATH} ${BUILDDIR}/${LDFLAGSPATH}
   sed -i '/^CFLAGS/ { s|$|'"${PCFLAGS}"'| }' ${BUILDDIR}/${CFLAGSPATH}  # Exactly 0 space needed
   sed -i '/^LDFLAGS/ { s|$| '"${PLDFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}  # Exactly 1 space needed
-  sed -i '/^LDFLAGS/ { s|$|\nLIBS = '"${LIBFLAGS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}
+  sed -i '/^LDFLAGS/ { s|$|\nLIBS = '"${PLIBS}"'| }' ${BUILDDIR}/${LDFLAGSPATH}
 
   ## Set path to FLRWSolver in `FLRWSolver/src/builder.py`
   FLRWSOLVERPATH=${ET_BUILD}/Cactus/repos/flrwsolver
