@@ -56,8 +56,8 @@ if [[ ${GLASS_IC_GEN} = true ]]; then
        | ts "[%x %X]"
   echo
 
-  # Activate environment containing astropy and the basic packages
-  conda activate cosmo
+  # Activate environment containing numpy and astropy
+  conda activate cosmo-nbody
   # Generate IC for StePS glass generation
   ${SIMDIR}/glass_linear/generate_glass_IC.py ${NPART} ${LBOX_H} ${MBINS} \
                                               ${PARTMIN} ${H0} ${GLASS_IC}.dat

@@ -42,7 +42,14 @@ clean_up() {
   # Delete created `*-temp.sh` files at the end of the script
   rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${SIMDIR}/*-temp.sh
+
+  # Delete conda environment created for N-body sims. and glass gen.
+  if { conda env list | grep 'cosmo-nbody'; } >/dev/null 2>&1; then
+    conda remove --name cosmo-nbody --all -y
+  fi
 }
+# Initial clean up previous sessions
+clean_up;
 
 
 # Parse input parameters
@@ -55,6 +62,9 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 # Setup bash environment for further commands
 # Normally this should be set up previously by installing the basic apps
 source ${SCRIPTDIR}/setup_env.sh
+
+# Setup conda environment for N-body sims. and glass gen.
+conda create --name cosmo-nbody python numpy astropy -y
 
 
 FLAGS="calc-missing,glass-ic,glass-sim,force-g2,force-steps,perturbate,ophase,help"
@@ -108,8 +118,8 @@ done
 #
 ## Conda should be sourced by the user
 if [[ ${CALC_MISSING} = true ]]; then
-  ## Activate environment containing astropy and the basic packages
-  conda activate cosmo
+  ## Activate environment containing numpy and astropy
+  conda activate cosmo-nbody
   ## Calculate missing variables and write them into the `parameters-*.sh` file
   ${SIMDIR}/calc_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
   ## Export newly calculated variables

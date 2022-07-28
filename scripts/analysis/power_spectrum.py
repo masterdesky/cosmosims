@@ -31,7 +31,7 @@ def main() -> None:
     Pk = PKL.Pk(delta,
                 BoxSize=LBOX_PER,
                 axis=0,
-                MAS='None',
+                MAS='CIC',
                 threads=8,
                 verbose=True
             )
@@ -52,7 +52,7 @@ def main() -> None:
     plt.plot(k, Pk.Pk[:, 2], label='Hexadecapole component',
              color='tab:orange', ls='--', lw=2)
     # Sum of multipole components
-    plt.plot(k, np.sum(Pk.Pk, axis=1), label='Sum', color='black', lw=3)
+    #plt.plot(k, np.sum(Pk.Pk, axis=1), label='Sum', color='black', lw=3)
 
     plt.legend(loc='upper left', fontsize=12)
 

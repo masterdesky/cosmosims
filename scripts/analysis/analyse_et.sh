@@ -26,7 +26,7 @@ source ${SCRIPTDIR}/setup_env.sh
 
 # Creating initial figure using SPLASH
 OUTDIR="${DATADIR}/EinsteinToolkit/simulations/flrw_R$1_L$2/output-0001/einsteintoolkit"
-splash -cactus_hdf5 ${OUTDIR}/einsteintoolkit_it007400.hdf5
+#splash -cactus_hdf5 ${OUTDIR}/einsteintoolkit_it007400.hdf5
 
 # Setup conda env for using Pylians3
 #if { conda env list | grep 'cosmo-analysis'; } >/dev/null 2>&1; then

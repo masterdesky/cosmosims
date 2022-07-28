@@ -100,7 +100,7 @@ echo "[PERTURBATE] Restoring masses in the created IC and slicing them..." \
      | ts "[%x %X]"
 echo
 
-conda activate cosmo
+conda activate cosmo-nbody
 ${SIMDIR}/gadget_io/recover_gadget_mass.py ${IC} ${GLASS_IC}_Mass ${GLASSTILEFAC}
 ${SIMDIR}/gadget_io/slice_gadget.py ${IC} ${N_FILES}
 conda deactivate

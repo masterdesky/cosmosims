@@ -61,7 +61,7 @@ sed -i '/^UnitVelocity_in_cm_per_s/ { s|\r$|   '"${V_g}"'   ;  cm / s| }' ${CURR
 # >>>>>> START OF THE N-BODY SIMULATION <<<<<<
 # Generate outputs.txt
 ## Activate environment containing astropy and the basic packages
-conda activate cosmo
+conda activate cosmo-nbody
 python3 ${SIMDIR}/nbody_sim/outputs.py ${START_T} ${END_T} ${N_SNAPSHOTS} ${OUT_DIR}
 conda deactivate
 

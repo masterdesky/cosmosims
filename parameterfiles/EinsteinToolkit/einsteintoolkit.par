@@ -229,9 +229,9 @@ IOHDF5::out3d_every	=
 IOHDF5::out3d_vars 	= "
   HydroBase::rho
   HydroBase::vel
+  ADMBase::alp
   ADMBase::metric
   ADMBase::curv
-  ADMBase::alp
  "
 
 IO::out_mode      = "onefile"  
