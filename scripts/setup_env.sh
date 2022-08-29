@@ -12,7 +12,7 @@
 
 # Adding entries here by running the installation script of the
 # basic applications
-export OMPI_INSTALL=/home/masterdesky/opt/openmpi-4.1.3
+export OMPI_INSTALL=/home/masterdesky/opt/openmpi-4.1.4
 export GSL1_INSTALL=/home/masterdesky/opt/gsl-1.9
 export GSL2_INSTALL=/home/masterdesky/opt/gsl-2.7
 export FFTW2_INSTALL=/home/masterdesky/opt/fftw-2.1.5

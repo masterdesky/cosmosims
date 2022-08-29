@@ -25,4 +25,15 @@ then
   if [[ -f ${BUILDDIR}/AREPO/m.log ]]; then
       make clean |& tee >(ts "[%x %X]" > ${BUILDDIR}/AREPO/cl.log)
   fi
+
+  #  Makefile and `Config.sh` setup
+  cp ${BUILDSYS}/AREPO/Makefile ${AREPO_BUILD}/Makefile
+  cp ${BUILDSYS}/AREPO/Makefile.systype ${AREPO_BUILD}/Makefile.systype
+  cp ${BUILDSYS}/AREPO/Config.sh ${AREPO_BUILD}/Config.sh
+
+  # Build AREPO
+  make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${AREPO_BUILD}/m.log)
+
+  cd ${BUILDDIR}
+
 fi

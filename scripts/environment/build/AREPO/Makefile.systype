@@ -4,8 +4,8 @@
 # system. Don't commit changes to this file unless you add support for
 # a new system.
 
+SYSTYPE="cosmosims"
 #SYSTYPE="Darwin"
 #SYSTYPE="Ubuntu"
-SYSTYPE="${COMPUTER}"
 
 #determine SYSTYPE#

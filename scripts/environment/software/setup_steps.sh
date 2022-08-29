@@ -35,6 +35,8 @@ then
   sed -i '/^HDF5_INC/ { s|$|  -I'"${HDF5_INSTALL}"'/include|g }' ${BUILDDIR}/StePS/StePS/src/Makefile
   ## Add `#include <cstring>` to `inputoutput.cc`
   sed -i '/^#include <stdlib.h>/ { s|$| \n#include <cstring>| }' ${BUILDDIR}/StePS/StePS/src/inputoutput.cc
+  
+  ## Build StePS
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${BUILDDIR}/StePS/StePS/src/m.log)
   
   cd ${BUILDDIR}

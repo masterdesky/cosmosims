@@ -19,7 +19,7 @@ then
 
     # Check no certificate, because `cosmo.nyu.edu` doesn't have a known issuer.
     # Updating `ca-certificate` does not help in this case.
-    # Currently this is an absolutely unsecure solution, but deal with it.
+    # Generally this is a dangerously unsecure solution, but that's the best I have for this software.
     wget "http://cosmo.nyu.edu/roman/2LPT/2LPTic.tar.gz" --no-check-certificate -P ${BUILDDIR}
     tar -xzvf ${BUILDDIR}/2LPTic.tar.gz -C ${BUILDDIR}
     rm -f ${BUILDDIR}/2LPTic.tar.gz
@@ -37,19 +37,19 @@ then
   if [[ -f ${LPT_BUILD}/m.log ]]; then
       make clean |& tee >(ts "[%x %X]" > ${LPT_BUILD}/cl.log)
   fi
-  ## Prepare Makefile
-  cp ${BUILDSYS}/2LPT-IC/Makefile ${LPT_BUILD}/
+  # Prepare Makefile
+  cp ${BUILDSYS}/2LPT-IC/Makefile ${LPT_BUILD}/Makefile
   sed -i '/^GSL_LIBS/ { s|$| -L'"${GSL1_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
   sed -i '/^GSL_INCL/ { s|$| -I'"${GSL1_INSTALL}"'/include|g }' ${LPT_BUILD}/Makefile
   sed -i '/^FFTW_LIBS/ { s|$| -L'"${FFTW2_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
   sed -i '/^FFTW_INCL/ { s|$| -I'"${FFTW2_INSTALL}"'/include|g }' ${LPT_BUILD}/Makefile
   sed -i '/^MPICHLIB/ { s|$| -L'"${OMPI_INSTALL}"'/lib|g }' ${LPT_BUILD}/Makefile
-
-  ## Change part in code which enables us to run opposite phase simulations
+  # Change part in code which enables us to run opposite phase simulations
   ## Line 216 in `main.c`
   sed -i '/.*phase =.*/ { s|PI|PI + PI|g };' ${LPT_BUILD}/main.c
 
-  ## Install 2LPT-IC
+  # Build 2LPT-IC with opposite phase
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${LPT_BUILD}/m.log)
+  
   cd ${BUILDDIR}
 fi

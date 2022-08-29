@@ -25,23 +25,22 @@ usage() {
   echo
   echo "Possible arguments are the following:"
   echo
-  echo "  --help    : Displays this message."
-  echo "  --i2lpt   : Install 2LPTic to ${BUILDDIR}/2LPT-IC."
-  echo "  --i2lptop : Install 2LPTic with opposite phase to ${BUILDDIR}/2LPT-IC-OP."
-  echo "  --ig2     : Install GADGET2 to ${BUILDDIR}/GADGET2."
-  echo "  --ig4     : Install GADGET4 to ${BUILDDIR}/GADGET4."
-  echo "  --igizmo  : Install GIZMO to ${BUILDDIR}/GIZMO."
-  echo "  --iarepo  : Install Arepo to ${BUILDDIR}/Arepo."
-  echo "  --isteps  : Install StePS to ${BUILDDIR}/StePS."
-  echo "  --igevol  : Install gevolution to ${BUILDDIR}/gevolution."
-  echo "  --icgr    : Install CosmoGRaPH to ${BUILDDIR}/CosmoGRaPH."
-  echo "  --iet     : Install EinteinToolkit with FLRWSolver to ${BUILDDIR}/EinsteinToolkit."
-  echo "  --igv     : Install GADGETViewer ${GV_VER} to ${BUILDDIR}/GADGETViewer-${GV_VER}."
-  echo "  --igenpk  : Install GenPK to ${BUILDDIR}/GenPK."
-  echo "  --ipyl3   : Install Pylians3 to ${BUILDDIR}/Pylians3."
-  echo "  --isp     : Install SPLASH to ${BUILDDIR}/SPLASH."
-  echo "  --force   : Force downloading all software selected for install."
-  echo "  --help    : Displays this message."
+  echo "  --2lpt   : Install 2LPTic to ${BUILDDIR}/2LPT-IC."
+  echo "  --2lptop : Install 2LPTic with opposite phase to ${BUILDDIR}/2LPT-IC-OP."
+  echo "  --g2     : Install GADGET2 to ${BUILDDIR}/GADGET2."
+  echo "  --g4     : Install GADGET4 to ${BUILDDIR}/GADGET4."
+  echo "  --steps  : Install StePS to ${BUILDDIR}/StePS."
+  echo "  --gizmo  : Install GIZMO to ${BUILDDIR}/GIZMO."
+  echo "  --arepo  : Install Arepo to ${BUILDDIR}/Arepo."
+  echo "  --gevol  : Install gevolution to ${BUILDDIR}/gevolution."
+  echo "  --cgr    : Install CosmoGRaPH to ${BUILDDIR}/CosmoGRaPH."
+  echo "  --et     : Install EinteinToolkit with FLRWSolver to ${BUILDDIR}/EinsteinToolkit."
+  echo "  --gv     : Install GADGETViewer ${GV_VER} to ${BUILDDIR}/GADGETViewer-${GV_VER}."
+  echo "  --genpk  : Install GenPK to ${BUILDDIR}/GenPK."
+  echo "  --pyl3   : Install Pylians3 to ${BUILDDIR}/Pylians3."
+  echo "  --sp     : Install SPLASH to ${BUILDDIR}/SPLASH."
+  echo "  --force  : Force the download of all software selected for install."
+  echo "  --help   : Display this message."
   echo 
 }
 
@@ -64,7 +63,7 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 source ${SCRIPTDIR}/setup_env.sh
 
 
-FLAGS="i2lpt,i2lptop,ig2,ig4,igizmo,iarepo,isteps,igevol,icgr,iet,igv,igenpk,ipyl3,isp,force,help"
+FLAGS="2lpt,2lptop,g2,g4,steps,gizmo,arepo,gevol,cgr,et,gv,genpk,pyl3,sp,force,help"
 # Call getopt to validate the provided input 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
@@ -76,46 +75,46 @@ options=$(getopt -o '' --long ${FLAGS} -- "$@")
 eval set -- "${options}"
 while true; do
   case ${1} in
-  --i2lpt)
+  --2lpt)
       export INSTALL_2LPT=true
       ;;
-  --i2lptop)
+  --2lptop)
       export INSTALL_2LPT_OP=true
       ;;
-  --ig2)
+  --g2)
       export INSTALL_G2=true
       ;;
-  --ig4)
+  --g4)
       export INSTALL_G4=true
       ;;
-  --isteps)
+  --steps)
       export INSTALL_STEPS=true
       ;;
-  --igevol)
-      export INSTALL_GEVOL=true
-      ;;
-  --icgr)
-      export INSTALL_CGRAPH=true
-      ;;
-  --igizmo)
+  --gizmo)
       export INSTALL_GIZMO=true
       ;;
-  --iarepo)
+  --arepo)
       export INSTALL_AREPO=true
       ;;
-  --igv)
-      export INSTALL_GV=true
+  --gevol)
+      export INSTALL_GEVOL=true
       ;;
-  --iet)
+  --cgr)
+      export INSTALL_CGRAPH=true
+      ;;
+  --et)
       export INSTALL_ET=true
       ;;
-  --igenpk)
+  --gv)
+      export INSTALL_GV=true
+      ;;
+  --genpk)
       export INSTALL_GENPK=true
       ;;
-	--ipyl3)
+	--pyl3)
       export INSTALL_PYL3=true
       ;;
-  --isp)
+  --sp)
       export INSTALL_SP=true
       ;;
   --force)

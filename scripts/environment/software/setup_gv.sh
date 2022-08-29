@@ -51,5 +51,6 @@ then
               |& tee >(ts "[%x %X]" > ${GV_BUILD}/c.log)
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${GV_BUILD}/m.log)
   make install |& tee >(ts "[%x %X]" > ${GV_BUILD}/mi.log)
+  
   cd ${BUILDDIR}
 fi

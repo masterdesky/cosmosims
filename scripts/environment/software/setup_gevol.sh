@@ -26,7 +26,7 @@ then
   if [[ -f ${GEVOL_BUILD}/m.log ]]; then
       make clean |& tee >(ts "[%x %X]" > ${GEVOL_BUILD}/cl.log)
   fi
-  ## Prepare Makefile
+  # Prepare Makefile
   cp ${BUILDSYS}/gevolution/makefile ${GEVOL_BUILD}/
   sed -i '/^INCLUDE/ { s|$| -I'"${LAT2_INSTALL}"'/include|g }' ${GEVOL_BUILD}/makefile
   sed -i '/^INCLUDE/ { s|$| -I'"${GSL2_INSTALL}"'/include|g }' ${GEVOL_BUILD}/makefile
@@ -36,7 +36,9 @@ then
   sed -i '/^LIB/ { s|$| -L'"${FFTW3_INSTALL}"'/lib|g }' ${GEVOL_BUILD}/makefile
   sed -i '/^LIB/ { s|$| -L'"${HDF5_INSTALL}"'/lib|g }' ${GEVOL_BUILD}/makefile
   sed -i '/^LIB/ { s|$| -lfftw3 -lm -lhdf5 -lgsl -lgslcblas|g }' ${GEVOL_BUILD}/makefile
-  ## Install gevolution 
+  
+  # Build gevolution
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${GEVOL_BUILD}/m.log)
+  
   cd ${BUILDDIR}
 fi

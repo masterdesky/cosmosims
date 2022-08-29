@@ -87,26 +87,26 @@ HWLOC_INCL=
 endif
 # end of Ubuntu
 
-# Custom Linux
-ifeq ($(SYSTYPE),"{SYSTEM}")
+# Setup for cosmosims
+ifeq ($(SYSTYPE),"cosmosims")
 # compiler and its optimization options
 OPTIMIZE  =  -std=c11 -ggdb -O3 -Wall -Wno-format-security -Wno-unknown-pragmas -Wno-unused-function
 
 # overwrite default:
-MPICH_INCL= -I{}
-MPICH_LIB = -L{} -lmpi
-GSL_INCL  = -I{}
-GSL_LIB   = -L{} -lgsl -lgslcblas
-HWLOC_LIB = -lhwloc
+MPICH_INCL= -I${OMPI_INSTALL}/include
+MPICH_LIB = -L${OMPI_INSTALL}/lib -lmpi
+GSL_INCL  = -I${GSL2_INSTALL}/include
+GSL_LIB   = -L${GSL2_INSTALL}/lib -lgsl -lgslcblas
+HWLOC_LIB = -L${HWLOC_INSTALL}/lib -lhwloc
 
 # libraries that are included on demand, depending on Config.sh options
-FFTW_INCL = -I{}
-FFTW_LIBS = -L{}
-HDF5_INCL = -I{} -DH5_USE_16_API
-HDF5_LIB  = -L{} -lhdf5 -lz
-HWLOC_INCL=
+FFTW_INCL = -I${FFTW2_INSTALL}/include
+FFTW_LIBS = -L${FFTW2_INSTALL}/lib
+HDF5_INCL = -I${HDF5_INSTALL}/include -DH5_USE_16_API
+HDF5_LIB  = -L${HDF5_INSTALL}/lib -lhdf5 -lz
+HWLOC_INCL= -I${HWLOC_INSTALL}/include
 endif
-# end of Custom
+# end of cosmosims
 
 
 # insert the library paths for your system here, similar to SYSTYPE "Darwin" above

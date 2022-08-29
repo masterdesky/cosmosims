@@ -1,18 +1,21 @@
 # Parameters to specify
-BUILDDIR    : ${HOME}/apps
-INSTALLDIR  : ${HOME}/opt
-BUILDSYS    : ${ENVDIR}/build
-LOGDIR      : ${SCRIPTDIR}/logs
+BUILDDIR    : ${HOME}/apps            # Rootdir of simulation and analysis software to be installed
+INSTALLDIR  : ${HOME}/opt             # Rootdir of dependency software (OpenMPI, GSL etc.) to be installed
+BUILDSYS    : ${ENVDIR}/build         # Directory containing configuration files (eg. Makefiles) for building software
+LOGDIR      : ${SCRIPTDIR}/logs       # Directory containing logs of software output
 
 # CONDAROOT
 # Path to the `conda` rootdir on the machine. Leave empty to search for conda
-# automatically on the machine in `PATH`.
+# automatically on the machine in regular locations.
 CONDAROOT   : 
 
-# Select a machine type
+# Select a machine type. This controls the location of data directories.
+# See `config/datadir.yml` for options. Use that file too to add a custom system.
 COMPUTER    : home
 
-# Number of CPUs and GPUs (if available) used for various tasks
+# Number of CPUs and GPUs (if available) used for various tasks (build sofware 
+# or run simulations and analysis)
 N_CPUS      : 8
 N_GPUS      : 1
-CUDA_VISIBLE_DEVICES : 0,1,2
+MEMMAX      : 512                     # Maximal memory used by software in Gb
+CUDA_VISIBLE_DEVICES : 0,1,2          # Indexes of GPUs to be used. Leave empty to use all GPUs.

@@ -57,7 +57,7 @@ then
   sed -i '/^GREAD/ { s|=.*|='"${GPK_BUILD}"'/GadgetReader| }' ${MAKEFILE}
   NEW_LFLAGS='-L${FFTW3_INSTALL}/lib -L${HDF5_INSTALL}/lib'
   sed -i '/^LFLAGS/ { s|-L${GREAD}|-L${GREAD} '"${NEW_LFLAGS}"'| }' ${MAKEFILE}
-  ## Gadget is always compiled with double precision
+  ## GADGET is always compiled with double precision
   sed -i '/^#OPT/ { s|#OPT|OPT| }' ${MAKEFILE}
   ## Build GenPK
   cd ${GPK_BUILD}

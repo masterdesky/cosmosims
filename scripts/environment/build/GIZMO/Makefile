@@ -161,10 +161,10 @@ FINCL =
 
 
 #------------------------------------------------------------------------------
-ifeq ($(SYSTYPE), ${COMPUTER})
+ifeq ($(SYSTYPE), "cosmosims")
 CC       =  mpicc
 CXX      =  mpic++
-FC       =  $(CC)
+FC       =  mpif90
 OPTIMIZE =  -g -Wall -O3 -fopenmp
 GSL_INCL = -I$(GSL2_INSTALL)/include
 GSL_LIBS = -L$(GSL2_INSTALL)/lib
@@ -174,10 +174,10 @@ ifeq (USE_FFTW3, $(findstring USE_FFTW3, $(CONFIGVARS)))
 FFTW_INCL= -I$(FFTW3_INSTALL)/include
 FFTW_LIBS= -L$(FFTW3_INSTALL)/lib
 endif
-HDF5INCL = -I$(HDF5_INSTALL)/include
+HDF5INCL = -I$(HDF5_INSTALL)/include -DH5_USE_16_API
 HDF5LIB  = -L$(HDF5_INSTALL)/lib -lhdf5 -lz
-#MPICHLIB =
-OPT      += 
+MPICHLIB =
+#OPT      += 
 ##
 ## Notes:
 ## 

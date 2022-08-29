@@ -60,6 +60,5 @@ then
   # Build GADGET4
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${G4_BUILD}/m.log)
 
-  mkdir -p ${G4_BUILD}/Simulations
   cd ${BUILDDIR}
 fi
