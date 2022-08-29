@@ -11,8 +11,9 @@
 # ==============================================================================
 
 # Adding entries here by running the installation script of the
-# basic applications
+# basic or analytic applications
 export OMPI_INSTALL=/home/masterdesky/opt/openmpi-4.1.4
+export MPICH_INSTALL=
 export GSL1_INSTALL=/home/masterdesky/opt/gsl-1.9
 export GSL2_INSTALL=/home/masterdesky/opt/gsl-2.7
 export FFTW2_INSTALL=/home/masterdesky/opt/fftw-2.1.5
@@ -25,7 +26,7 @@ export GIZA_INSTALL=/home/masterdesky/apps/SPLASH/giza
 export PYL3_INSTALL=/home/masterdesky/apps/Pylians3/library/build/lib.linux-x86_64-cpython-310
 
 # Adding binaries to `PATH` variable
-for BIN_PATH in OMPI_INSTALL SPLASH_DIR; do
+for BIN_PATH in OMPI_INSTALL MPICH_INSTALL SPLASH_DIR; do
   if [[ -z ${!BIN_PATH} ]]; then
     continue
   fi
@@ -45,7 +46,7 @@ for LIB_PATH in PYL3_INSTALL; do
 done
 
 # Adding libraries to the `LD_LIBRARY_PATH` variable
-for LIB_PATH in OMPI_INSTALL GSL1_INSTALL GSL2_INSTALL \
+for LIB_PATH in OMPI_INSTALL MPICH_INSTALL GSL1_INSTALL GSL2_INSTALL \
                 FFTW2_INSTALL FFTW3_INSTALL HWLOC_INSTALL HDF5_INSTALL \
                 GIZA_INSTALL; do
   if [[ -z ${!LIB_PATH} ]]; then
@@ -60,6 +61,9 @@ done
 # Setting include paths for GCC. Some software require the `C_INCLUDE_PATH` and
 # `CPLUS_INCLUDE_PATH` variables to be set
 for INCLUDE_PATH in LAT2_INSTALL FFTW2_INSTALL FFTW3_INSTALL HDF5_INSTALL; do
+  if [[ -z ${!INCLUDE_PATH} ]]; then
+    continue
+  fi
 	if [[ ":${C_INCLUDE_PATH}:" != *":${!INCLUDE_PATH}/include:"* ]]; then
 		export C_INCLUDE_PATH="${!INCLUDE_PATH}/include:${C_INCLUDE_PATH}"
 	fi

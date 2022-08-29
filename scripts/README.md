@@ -1,11 +1,4 @@
 ## Prerequisites
-- conda installed for user with an environment called `steps`,  containing
-python, numpy, pandas, scipy, future, matplotlib, seaborn, astropy and h5py.
-This can be setup via
-    ```bash
-    conda create --name steps python numpy pandas scipy future matplotlib seaborn astropy h5py
-    ```
-
 - Valid C, C++ and Fortran compilers, eg. GCC and GFortran that can be installed via
     ```bash
     sudo apt install build-essential gfortran
