@@ -27,6 +27,7 @@ usage() {
   echo "Possible arguments are the following:"
   echo
   echo "  --ompi  : Install OpenMPI ${OMPI_VER} to ${INSTALLDIR}."
+  echo "  --mpich : Install MPICH ${MPICH_VER} to ${INSTALLDIR}"
   echo "  --gsl1  : Install GSL ${GSL1_VER} to ${INSTALLDIR}."
   echo "  --gsl2  : Install GSL ${GSL2_VER} to ${INSTALLDIR}."
   echo "  --fftw2 : Install FFTW ${FFTW2_VER} to ${INSTALLDIR}."
@@ -41,7 +42,7 @@ usage() {
 
 clean_up() {
   # Delete created `parameters*.sh` file at the end of the script
-  rm ${SCRIPTDIR}/config/*-temp.sh
+  #rm ${SCRIPTDIR}/config/*-temp.sh
   rm ${ENVDIR}/dependency/*-temp.sh
 }
 
@@ -58,7 +59,7 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 source ${SCRIPTDIR}/setup_env.sh
 
 
-FLAGS="ompi,gsl1,gsl2,fftw2,fftw3,hwloc,lat2,hdf5,force,help"
+FLAGS="ompi,mpich,gsl1,gsl2,fftw2,fftw3,hwloc,lat2,hdf5,force,help"
 # Call getopt to validate the provided input. 
 options=$(getopt -o '' --long ${FLAGS} -- "$@")
 [ $? -eq 0 ] || { 
@@ -75,6 +76,12 @@ while true; do
       export OMPI_BUILD=${BUILDDIR}/openmpi-${OMPI_VER}
       export OMPI_INSTALL=${INSTALLDIR}/openmpi-${OMPI_VER}
       sed -i '/^export OMPI/ { s|\=.*|='"${OMPI_INSTALL}"'| }' ${SCRIPTDIR}/setup_env.sh
+      ;;
+  --mpich)
+      export INSTALL_MPICH=true
+      export MPICH_BUILD=${BUILDDIR}/mpich-${MPICH_VER}
+      export MPICH_INSTALL=${INSTALLDIR}/mpich-${MPICH_VER}
+      sed -i '/^export MPICH/ { s|\=.*|='"${MPICH_INSTALL}"'| }' ${SCRIPTDIR}/setup_env.sh
       ;;
   --gsl1)
       export INSTALL_GSL1=true
