@@ -23,30 +23,31 @@ export ROOTDIR="$( dirname "${SCRIPTDIR}" )"
 
 
 usage() {
-  echo "Usage: $0 [ --arguments (...) ]"
-  echo
-  echo "Possible arguments are the following:"
-  echo
-  echo "  --calc-missing : Calculates necessary variables for the simulations."
-  echo "  --glass-ic     : Generate initial conditions for the glass generation."
-  echo "  --glass-sim    : Perform the glass simulation on CPU or GPU."
-  echo "  --force-g2     : Run glass and glass IC generation using GADGET-2."
-  echo "  --force-steps  : Run glass generation using StePS."
-  echo "  --perturbate   : Apply 2LPT perturbations to the input glass."
-  echo "  --ophase       : Apply opposite phase 2LPT perturbations."
-  echo "  --help         : Displays this message."
-  echo 
+    echo 
+    echo "Usage: $0 [ --arguments (...) ]"
+    echo
+    echo "Possible arguments are the following:"
+    echo
+    echo "  --calc-missing : Calculates necessary variables for the simulations."
+    echo "  --glass-ic     : Generate initial conditions for the glass generation."
+    echo "  --glass-sim    : Perform the glass simulation on CPU or GPU."
+    echo "  --force-g2     : Run glass and glass IC generation using GADGET-2."
+    echo "  --force-steps  : Run glass generation using StePS."
+    echo "  --perturbate   : Apply 2LPT perturbations to the input glass."
+    echo "  --ophase       : Apply opposite phase 2LPT perturbations."
+    echo "  --help         : Displays this message."
+    echo 
 }
 
 clean_up() {
-  # Delete created `*-temp.sh` files at the end of the script
-  rm ${SCRIPTDIR}/config/*-temp.sh
-  rm ${SIMDIR}/*-temp.sh
+    # Delete created `*-temp.sh` files upon exit
+    rm ${SCRIPTDIR}/config/*-temp.sh
+    rm ${SIMDIR}/*-temp.sh
 
-  # Delete conda environment created for N-body sims. and glass gen.
-  if { conda env list | grep 'cosmo-nbody'; } >/dev/null 2>&1; then
-    conda remove --name cosmo-nbody --all -y
-  fi
+    # Delete conda environment created for N-body sims. and glass gen.
+    if { conda env list | grep 'cosmo-nbody'; } >/dev/null 2>&1; then
+        conda remove --name cosmo-nbody --all -y
+    fi
 }
 # Initial clean up previous sessions
 clean_up;
@@ -78,80 +79,78 @@ options=$(getopt -o '' --long ${FLAGS} -- "$@")
 }
 eval set -- "${options}"
 while true; do
-  case ${1} in
-  --calc-missing)
-      export CALC_MISSING=true
-      ;;
-  --glass-ic)
-      export GLASS_IC_GEN=true
-      ;;
-  --glass-sim)
-      export GLASS_SIM=true
-      ;;
-  --force-g2)
-      export FORCE_G2=true
-      ;;
-  --force-steps)
-      export FORCE_STEPS=true
-      ;;
-  --perturbate)
-      export PERTURBATE=true
-      ;;
-  --ophase)
-      export O_PHASE=true
-      ;;
-  --help)
-      usage
-      clean_up
-      exit 1
-      ;;
-  --)
-      break
-      shift
-      ;;
-  esac
-  shift
+    case ${1} in
+    --calc-missing)
+        export CALC_MISSING=true
+        ;;
+    --glass-ic)
+        export GLASS_IC_GEN=true
+        ;;
+    --glass-sim)
+        export GLASS_SIM=true
+        ;;
+    --force-g2)
+        export FORCE_G2=true
+        ;;
+    --force-steps)
+        export FORCE_STEPS=true
+        ;;
+    --perturbate)
+        export PERTURBATE=true
+        ;;
+    --ophase)
+        export O_PHASE=true
+        ;;
+    --help)
+        usage
+        clean_up
+        exit 1
+        ;;
+    --)
+        break
+        shift
+        ;;
+    esac
+    shift
 done
 
 
 # Calculate missing variables
-#
-## Conda should be sourced by the user
 if [[ ${CALC_MISSING} = true ]]; then
-  ## Activate environment containing numpy and astropy
-  conda activate cosmo-nbody
-  ## Calculate missing variables and write them into the `parameters-*.sh` file
-  ${SIMDIR}/calc_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
-  ## Export newly calculated variables
-  for PAR in ${SIMDIR}/*-temp.sh; do
-    source ${PAR}
-  done
-  conda deactivate
+    ## Activate environment containing numpy and astropy
+    conda activate cosmo-nbody
+    ## Calculate missing variables and write them into the `parameters-*.sh` file
+    ${SIMDIR}/calc_variables.py ${H0} ${LBOX} ${LBOX_PER} ${SIMDIR}
+    ## Export newly calculated variables
+    for PAR in ${SIMDIR}/*-temp.sh; do
+        source ${PAR}
+    done
+    conda deactivate
 fi
 
 
 # Perform glass generation
 if [[ ${FORCE_STEPS} = true ]]; then
-  if [[ ${GLASS_SIM} = true ]]; then
-    echo
-    echo "[GLASS GEN] StePS simulation with ${MBINS} mass bins." \
-    | ts "[%x %X]"
-  fi
-  source ${SIMDIR}/glass_linear/glass_StePS.sh
+    if [[ ${GLASS_SIM} = true ]]; then
+        echo
+        echo "[GLASS GEN] StePS simulation with ${MBINS} mass bins." \
+        | ts "[%x %X]"
+    fi
+    source ${SIMDIR}/glass_linear/glass_StePS.sh
 else
-  if [[ ${GLASS_SIM} = true ]]; then
-    echo
-    echo "[GLASS GEN] GADGET2 simulation with ${MBINS} mass bins." \
-    | ts "[%x %X]"
-  fi
-  source ${SIMDIR}/glass_linear/glass_gadget2.sh
+    if [[ ${GLASS_SIM} = true ]]; then
+        echo
+        echo "[GLASS GEN] GADGET2 simulation with ${MBINS} mass bins." \
+        | ts "[%x %X]"
+    fi
+    source ${SIMDIR}/glass_linear/glass_gadget2.sh
 fi
 
 
 # Add non-linear components to the linear glass
 if [[ ${PERTURBATE} = true ]]; then
-  # Perturbate glass with 2LPT-IC
-  source ${SIMDIR}/glass_nonlinear/perturbate_2lptic.sh
+    # Perturbate glass with 2LPT-IC
+    source ${SIMDIR}/glass_nonlinear/perturbate_2lptic.sh
 fi
 
 
