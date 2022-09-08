@@ -52,12 +52,12 @@ PARFILE=${PARFILE%.*}
 ## SED1: Changes all `:` in the YAML to `="` while excluding the `://` string
 ##       that can be part of an URL.
 SED1='s/:[^:\/\/]/="/g;'
-## SED2: Remove 
-SED2='/\S+\s+#\w*/ { s||"|g }'
-## SED3: Puts a `"` character at the end of each line that is not empty nor is
-##       a comment line. Excludes those valid lines too that contains an inline
+## SED2: Puts a `"` character at the end of each line that is not empty nor is
+##       a comment line. Excludes those valid lines too that contain an inline
 ##       comment. Checks for trailing lines preceeding EOF too.
-SED3='/((^(\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$|^#|^.*#.*$)/ ! s/$/"/g;'
+SED2='/((^(\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$|^#|^.*#.*$)/ ! s/$/"/g;'
+## SED3: Same as `SED2`, but handles lines with inline comments specifically.
+SED3='/\S+\s+#\w*/ { s|\s+#|"  #|g; }'
 ## SED4: Puts `export` at the beginning of each line that is not empty nor is
 ##       a comment line. Checks for trailing lines preceeding EOF too.
 SED4='/(^(\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$|^#|^\w*#.*$/ ! s/^/export /g;'
