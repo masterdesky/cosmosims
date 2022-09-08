@@ -16,12 +16,12 @@ if [[ ${INSTALL_MPICH} = true ]]; then
     mkdir -p ${BUILDDIR}
 
     # Download MPICH
-    if [[ ${MPICH_PREFIX::1} < 3 ]]; then
+    if [[ ${MPICH_VER::1} < 3 ]]; then
         MPICH_PREFIX="mpich2"
     else
         MPICH_PREFIX="mpich"
     fi
-    wget "https://www.mpich.org/static/downloads/${MPICH_VER}/${MPICH_PREFIX}-${MPICH_VER}.tar.gz"
+    wget "https://www.mpich.org/static/downloads/${MPICH_VER}/${MPICH_PREFIX}-${MPICH_VER}.tar.gz" -P ${BUILDDIR}
     tar -xzvf ${BUILDDIR}/${MPICH_PREFIX}-${MPICH_VER}.tar.gz -C ${BUILDDIR}
     rm -f ${BUILDDIR}/${MPICH_PREFIX}-${MPICH_VER}.tar.gz
   fi
@@ -41,6 +41,8 @@ if [[ ${INSTALL_MPICH} = true ]]; then
   fi
   # Install MPICH
   ./configure --prefix=${MPICH_INSTALL} \
+              FFLAGS=-fallow-argument-mismatch \
+              FCFLAGS=-fallow-argument-mismatch \
               |& tee >(ts "[%x %X]" > ${MPICH_BUILD}/c.log)
   make -j${N_CPUS} |& tee >(ts "[%x %X]" > ${MPICH_BUILD}/m.log)
   make install |& tee >(ts "[%x %X]" > ${MPICH_BUILD}/mi.log)
