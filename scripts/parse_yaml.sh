@@ -48,13 +48,24 @@ fi
 PARFILE=$(ls ${1} | grep ${2}.*.yml)
 PARFILE=${PARFILE%.*}
 
-
 # Parses `${2}*.yml` and saves output as `${2}*-temp.sh`
-sed -Ee 's/:[^:\/\/]/="/g;' \
-    -Ee '/(^#|((\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$)/ ! s/$/"/g;' \
-    -Ee '/(^#|^$)/ ! s/^/export /g;' \
-    -Ee 's/ *=/=/g;' \
-          ${1}/${PARFILE}.yml > ${1}/${PARFILE}-temp.sh
+## SED1: Changes all `:` in the YAML to `="` while excluding the `://` string
+##       that can be part of an URL.
+SED1='s/:[^:\/\/]/="/g;'
+## SED2: Puts a `"` character at the end of each line that is not empty nor is
+##       a comment line. Excludes those valid lines too that contain an inline
+##       comment. Checks for trailing lines preceeding EOF too.
+SED2='/((^(\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$|^#|^.*#.*$)/ ! s/$/"/g;'
+## SED3: Same as `SED2`, but handles lines with inline comments specifically.
+SED3='/\S+\s+#\w*/ { s|\s+#|"  #|g; }'
+## SED4: Puts `export` at the beginning of each line that is not empty nor is
+##       a comment line. Checks for trailing lines preceeding EOF too.
+SED4='/(^(\r\n|\n|\r)$)|(^(\r\n|\n|\r))|^\s*$|^#|^\w*#.*$/ ! s/^/export /g;'
+## SED5: Clears all whitespace that precede `=` symbols.
+SED5='s/\s*=/=/g;'
+
+sed -Ee "${SED1}" -Ee "${SED2}" -Ee "${SED3}" -Ee "${SED4}" -Ee "${SED5}" \
+        ${1}/${PARFILE}.yml > ${1}/${PARFILE}-temp.sh
 chmod +x ${1}/${PARFILE}-temp.sh
 
 # Sourcing to enable parameters

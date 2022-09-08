@@ -23,30 +23,31 @@ export ROOTDIR="$( dirname "${SCRIPTDIR}" )"
 
 
 usage() {
-  echo "Usage: $0 [ --arguments (...) ]"
-  echo
-  echo "Possible arguments are the following:"
-  echo
-  echo "  --calc-missing : Calculates necessary variables for the simulations."
-  echo "  --g2           : Use GADGET-2 for the N-body simulation."
-  echo "  --g4           : Use GADGET-4 for the N-body simulation."
-  echo "  --gevol        : Use gevolution for the N-body simulation."
-  echo "  --cgr          : Use CosmoGRaPH for the hydrodynamic simulation."
-  echo "  --et           : Use the EinsteinToolkit for the hydrodynamic simulation."
-  echo "  --arepo        : Use AREPO for the hydrodynamic simulation."
-  echo "  --help         : Displays this message."
-  echo 
+    echo 
+    echo "Usage: $0 [ --arguments (...) ]"
+    echo
+    echo "Possible arguments are the following:"
+    echo
+    echo "  --calc-missing : Calculates necessary variables for the simulations."
+    echo "  --g2           : Use GADGET-2 for the N-body simulation."
+    echo "  --g4           : Use GADGET-4 for the N-body simulation."
+    echo "  --gevol        : Use gevolution for the N-body simulation."
+    echo "  --cgr          : Use CosmoGRaPH for the hydrodynamic GR simulation."
+    echo "  --et           : Use the EinsteinToolkit for the hydrodynamic GR simulation."
+    echo "  --arepo        : Use AREPO for the hydrodynamic simulation."
+    echo "  --help         : Displays this message."
+    echo 
 }
 
 clean_up() {
-  # Delete created `*-temp.sh` files at the end of the script
-  rm ${SCRIPTDIR}/config/*-temp.sh
-  rm ${SIMDIR}/*-temp.sh
+    # Delete created `*-temp.sh` files upon exit
+    rm ${SCRIPTDIR}/config/*-temp.sh
+    rm ${SIMDIR}/*-temp.sh
 
-  # Delete conda environment created for N-body simulations
-  if { conda env list | grep 'cosmo-nbody'; } >/dev/null 2>&1; then
-    conda remove --name cosmo-nbody --all -y
-  fi
+    # Delete conda environment created for N-body simulations
+    if { conda env list | grep 'cosmo-nbody'; } >/dev/null 2>&1; then
+        conda remove --name cosmo-nbody --all -y
+    fi
 }
 # Initial clean up previous sessions
 clean_up;
@@ -78,83 +79,81 @@ options=$(getopt -o '' --long ${FLAGS} -- "$@")
 }
 eval set -- "${options}"
 while true; do
-  case ${1} in
-  --calc-missing)
-      export CALC_MISSING=true
-      ;;
-  --g2)
-      export G2=true
-      ;;
-  --g4)
-      export G4=true
-      ;;
-  --gevol)
-      export GEVOL=true
-      ;;
-  --cgr)
-      export CGR=true
-      ;;
-  --et)
-      export ET=true
-      ;;
-  --arepo)
-      export AREPO=true
-      ;;
-  --help)
-      usage
-      clean_up
-      exit 1;
-      ;;
-  --)
-      break
-      shift
-      ;;
-  esac
-  shift
+    case ${1} in
+    --calc-missing)
+        export CALC_MISSING=true
+        ;;
+    --g2)
+        export G2=true
+        ;;
+    --g4)
+        export G4=true
+        ;;
+    --gevol)
+        export GEVOL=true
+        ;;
+    --cgr)
+        export CGR=true
+        ;;
+    --et)
+        export ET=true
+        ;;
+    --arepo)
+        export AREPO=true
+        ;;
+    --help)
+        usage
+        clean_up
+        exit 1;
+        ;;
+    --)
+        break
+        shift
+        ;;
+    esac
+    shift
 done
 
 
 # Calculate missing variables
-#
-## Conda should be sourced by the user
 if [[ ${CALC_MISSING} = true ]]; then
-  ## Activate environment containing numpy and astropy
-  conda activate cosmo-calc
-  ## Calculate missing variables and write them into the `parameters-*.sh` file
-  ${SIMDIR}/calc_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
-  ## Export newly calculated variables
-  for PAR in ${SIMDIR}/*-temp.sh; do
-    source ${PAR}
-  done
-  conda deactivate
+    ## Activate environment containing numpy and astropy
+    conda activate cosmo-calc
+    ## Calculate missing variables and write them into the `parameters-*.sh` file
+    ${SIMDIR}/calc_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
+    ## Souce newly calculated variables
+    for PAR in ${SIMDIR}/*-temp.sh; do
+        source ${PAR}
+    done
+    conda deactivate
 fi
 
 if [[ ${G2} = true ]]; then
-  echo "[NBODY] GADGET2 simulation with newtonian physics." \
-  | ts "[%x %X]"
-  ${SCRIPTDIR}/environment/setup_software.sh --ig2
-  source ${SIMDIR}/nbody_sim/nbody_gadget2.sh
+    echo "[NBODY] GADGET2 simulation with newtonian physics." \
+    | ts "[%x %X]"
+    ${SCRIPTDIR}/environment/setup_software.sh --ig2
+    source ${SIMDIR}/nbody_sim/nbody_gadget2.sh
 elif [[ ${G4} = true ]]; then
-  echo "[NBODY] GADGET4 simulation with newtonian physics." \
-  | ts "[%x %X]"
-  ${SCRIPTDIR}/environment/setup_software.sh --ig4
-  source ${SIMDIR}/nbody_sim/nbody_gadget4.sh
+    echo "[NBODY] GADGET4 simulation with newtonian physics." \
+    | ts "[%x %X]"
+    ${SCRIPTDIR}/environment/setup_software.sh --ig4
+    source ${SIMDIR}/nbody_sim/nbody_gadget4.sh
 elif [[ ${GEVOL} = true ]]; then
-  echo "[NBODY] gevolution 1.2 simulation with GR physics." \
-  | ts "[%x %X]"
-  source ${SIMDIR}/nbody_sim/nbody_gevolution.sh
+    echo "[NBODY] gevolution 1.2 simulation with GR physics." \
+    | ts "[%x %X]"
+    source ${SIMDIR}/nbody_sim/nbody_gevolution.sh
 elif [[ ${CGR} = true ]]; then
-  echo "[NBODY] CosmoGRaPH simulation with GR physics." \
-  | ts "[%x %X]"
-  source ${SIMDIR}/nbody_sim/nbody_cgr.sh
+    echo "[NBODY] CosmoGRaPH simulation with GR physics." \
+    | ts "[%x %X]"
+    source ${SIMDIR}/nbody_sim/nbody_cgr.sh
 elif [[ ${ET} = true ]]; then
-  echo "[NBODY] EinsteinToolkit simulation with GR physics." \
-  | ts "[%x %X]"
-  source ${SIMDIR}/nbody_sim/nbody_et.sh
+    echo "[NBODY] EinsteinToolkit simulation with GR physics." \
+    | ts "[%x %X]"
+    source ${SIMDIR}/nbody_sim/nbody_et.sh
 elif [[ ${AREPO} = true ]]; then
-  echo "[NBODY] AREPO hydro simulation with newtonian physics." \
-  | ts "[%x %X]"
-  source ${SIMDIR}/nbody_sim/nbody_arepo.sh
+    echo "[NBODY] AREPO hydro simulation with newtonian physics." \
+    | ts "[%x %X]"
+    source ${SIMDIR}/nbody_sim/nbody_arepo.sh
 fi
 
 
