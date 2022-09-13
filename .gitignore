@@ -2,9 +2,6 @@
 .vscode/
 *-temp*
 
-# Exclude notebook folder (TEMPORARY)
-notebooks/
-
 # http://www.gnu.org/software/automake
 
 Makefile.in
