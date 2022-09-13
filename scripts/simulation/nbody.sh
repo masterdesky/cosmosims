@@ -112,12 +112,11 @@ while true; do
 done
 
 
-# Setup conda environment for N-body sims. and glass gen.
-conda create --name cosmo-nbody python numpy astropy -y
-
 # Calculate missing variables
 if [[ ${CALC_MISSING} = true ]]; then
     ## Activate environment containing numpy and astropy
+    # Setup conda environment for N-body sims. and glass gen.
+    conda create --name cosmo-nbody python numpy astropy -y
     conda activate cosmo-nbody
     ## Calculate missing variables and write them into the `parameters-*.sh` file
     ${SIMDIR}/calc_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}

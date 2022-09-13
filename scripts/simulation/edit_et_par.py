@@ -12,7 +12,7 @@ from astropy import constants as const
 cds.enable()
 
 
-def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
+def edit_variables(RES, LBOX_PER, ZINI, ZINC, ETPAR, ETRESPAR, SEED=None):
     '''
     Define some functions for FLRW analytic scale factor, redshift, evolution
     '''
@@ -24,7 +24,8 @@ def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
         return (1. + zinit) / aval - 1.
 
     # Seed for the simulation (maximum of unsigned int32)
-    SEED  = np.random.randint(low=0, high=(2_147_483_647 + 1), dtype=np.uint32)
+    if SEED is None:
+        SEED = np.random.randint(low=0, high=(2_147_483_647 + 1), dtype=np.uint32)
     # Desired proper/comoving length of box at redshift z=0 in Gpc/h
     Lz0   = LBOX_PER/1000 * u.Gpc # /h
     # Initial redshift, scale factor, time (latter should stay the same)
@@ -32,11 +33,11 @@ def edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR):
     ainit = 1.0
     # Simulation (code units) box size, dtfac, res, etc
     boxL  = 1.0
-    dtfac = 0.05
+    dtfac = 0.1
     dx    = boxL / RES
     dt    = dtfac * dx
     # Redshift after which you'd like to increase freq of 3D output
-    zinc = 3.0
+    zinc = ZINC
     
     print()
     print(f' Hello! finding initial FLRWSolver parameters for your choices: ')
@@ -161,7 +162,8 @@ if __name__ == '__main__':
     RES = int(sys.argv[1])
     LBOX_PER = float(sys.argv[2])
     ZINI = float(sys.argv[3])
-    ETPAR = sys.argv[4]
-    ETRESPAR = sys.argv[5]
+    ZINC = float(sys.argv[4])
+    ETPAR = sys.argv[5]
+    ETRESPAR = sys.argv[6]
 
-    edit_variables(RES, LBOX_PER, ZINI, ETPAR, ETRESPAR)
+    edit_variables(RES, LBOX_PER, ZINI, ZINC, ETPAR, ETRESPAR)
