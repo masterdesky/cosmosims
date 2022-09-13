@@ -64,9 +64,6 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 # Normally this should be set up previously by installing the basic apps
 source ${SCRIPTDIR}/setup_env.sh
 
-# Setup conda environment for N-body sims. and glass gen.
-conda create --name cosmo-nbody python numpy astropy -y
-
 
 FLAGS="calc-missing,glass-ic,glass-sim,force-g2,force-steps,perturbate,ophase,help"
 # Call getopt to validate the provided input. 
@@ -114,6 +111,9 @@ while true; do
     shift
 done
 
+
+# Setup conda environment for N-body sims. and glass gen.
+conda create --name cosmo-nbody python numpy astropy -y
 
 # Calculate missing variables
 if [[ ${CALC_MISSING} = true ]]; then

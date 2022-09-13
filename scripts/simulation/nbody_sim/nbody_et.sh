@@ -48,7 +48,7 @@ SIMPAR=${OUTDIR}/SIMFACTORY/par/${PARNAME}.par
 
 # 4. Determine and fill values to the parameterfile templates
 ## Calculating cosmological and simulation parameters
-python3 ${SIMDIR}/edit_et_par.py ${RES} ${LBOX_PER} 1100 ${ETPAR} ${ETRESPAR}
+python3 ${SIMDIR}/edit_et_par.py ${RES} ${LBOX_PER} 1100 ${ZINC} ${ETPAR} ${ETRESPAR}
 
 ## Specifying location of power spectrum in parameterfile
 PKPATH=${FLRWSOLVERPATH}/powerspectra/camb/FLRW_matterpower_z1100.dat
@@ -60,7 +60,7 @@ sed -i '/^IO::recover_dir/ { s|=.*|= \"'"${PARNAME}"'\/\"| }' ${ETRESPAR}
 INIT_F=200
 sed -i '/^IOHDF5::out3d_every/ { s|=.*|= '"${INIT_F}"'| }' ${ETPAR}
 ## Frequency of 3D outputs at low `z` values (iterations per output)
-INCR_F=100
+INCR_F=1
 sed -i '/^IOHDF5::out3d_every/ { s|=.*|= '"${INCR_F}"'| }' ${ETRESPAR}
 
 

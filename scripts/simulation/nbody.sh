@@ -64,9 +64,6 @@ source ${SCRIPTDIR}/parse_yaml.sh ${SCRIPTDIR}/config "datadir"
 # Normally this should be set up previously by installing the basic apps
 source ${SCRIPTDIR}/setup_env.sh
 
-# Setup conda environment for N-body simulations
-conda create --name cosmo-nbody python numpy astropy -y
-
 
 FLAGS="calc-missing,g2,g4,gevol,cgr,et,arepo,help"
 # Call getopt to validate the provided input. 
@@ -118,7 +115,9 @@ done
 # Calculate missing variables
 if [[ ${CALC_MISSING} = true ]]; then
     ## Activate environment containing numpy and astropy
-    conda activate cosmo-calc
+    # Setup conda environment for N-body sims. and glass gen.
+    conda create --name cosmo-nbody python numpy astropy -y
+    conda activate cosmo-nbody
     ## Calculate missing variables and write them into the `parameters-*.sh` file
     ${SIMDIR}/calc_variables.py ${H0} ${RES} ${LBOX} ${LBOX_PER} ${SIMDIR}
     ## Souce newly calculated variables

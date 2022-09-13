@@ -6,7 +6,7 @@ IC          : /home/masterdesky/data/2LPT-IC/ICs/IC_N262144_L1000_M1/IC_N262144_
 
 
 # PARAMETERS FOR GLASS IC GENERATION
-RES           : 96
+RES           : 64
 NPART         : TO_BE_CALC
 LBOX          : 100
 LBOX_H        : TO_BE_CALC
@@ -15,11 +15,12 @@ PARTMIN       : 150
 
 # PARAMETERS FOR NBODY IC GENERATION AND SIMULATION
 NMESH         : ${RES}
-LBOX_PER      : 200
+LBOX_PER      : 1000
 LBOX_PER_H    : TO_BE_CALC
 GLASSTILEFAC  : 2
 START_Z       : 127
 END_Z         : 0
+ZINC          : 0.001
 N_SNAPSHOTS   : 2
 N_FILES       : 1
 
